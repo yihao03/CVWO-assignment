@@ -1,0 +1,3 @@
+controllers:
+    1. Add hook for before and after update/save
+    2. Add password hashing

@@ -1,0 +1,113 @@
+import React, { useState } from 'react';
+import TextField from "@mui/material/TextField";
+import apiClient from "../api/axiosInstance.ts";
+
+interface FormData {
+  username: string;
+  email: string;
+  password: string;
+}
+
+const UserCreationForm: React.FC = () => {
+  // State to store form input values
+  const [formData, setFormData] = useState<FormData>({
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string>('');
+
+  // Handle input change
+  function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement> ) {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccessMessage('');
+
+    // Validate form data
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      // Send POST request to backend
+      const response = await apiClient.post('/users', formData);
+      setSuccessMessage('User created successfully!');
+    } catch (err) {
+      setError('Error creating user');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Basic form validation
+  const validateForm = (): boolean => {
+    const { username, email, password } = formData;
+    if (!username || !email || !password) {
+      setError('All fields are required');
+      return false;
+    }
+    // Add more validation logic as needed
+    return true;
+  };
+
+  return (
+    <div>
+      <h1>Create User</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <TextField
+            id="outlined-basic"
+            label="username"
+            name="username"
+            margin="normal"
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <TextField
+            id="outlined-basic"
+            label="email"
+            name="email"
+            margin="normal"
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <TextField
+            id="outlined-basic"
+            label="password"
+            name="password"
+            type="password"
+            margin="normal"
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <button type="submit" disabled={loading}>
+          {loading ? 'Submitting...' : 'Create User'}
+        </button>
+      </form>
+
+      {error && <p style={{color: 'red'}}>{error}</p>}
+      {successMessage && <p style={{color: 'green'}}>{successMessage}</p>}
+    </div>
+  );
+};
+
+export default UserCreationForm;
