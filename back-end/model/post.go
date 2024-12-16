@@ -4,9 +4,11 @@ import "gorm.io/gorm"
 
 type Post struct {
 	gorm.Model
-	UserID  uint   `json:"user_id"`
-	Title   string `gorm:"size:255" json:"title"`
-	Content string `gorm:"type:text" json:"content"`
+	UserID   uint   `json:"user_id"`
+	Username string `json:"username"`
+	Title    string `gorm:"size:255" json:"title"`
+	Content  string `gorm:"type:text" json:"content"`
+	Parent   uint   `json:"parent_id"`
 }
 
 type Like struct {

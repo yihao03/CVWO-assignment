@@ -4,6 +4,7 @@ import (
 	"backend/controllers"
 	"backend/initializers"
 	"backend/model"
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"log"
 
@@ -29,16 +30,24 @@ func main() {
 	loadDataBase()
 	//Posts
 	r.POST("/posts", controllers.Post)
+	r.GET("/posts", controllers.GetAllPost)
 	r.GET("/posts/:id", controllers.GetPost)
 	r.PUT("posts/:id", controllers.UpdatePost)
 	r.DELETE("posts/:id", controllers.DeletePost)
 
 	//Users
 	r.POST("/users", controllers.CreateUser)
+	r.POST("/login", controllers.Login)
+	r.GET("/users", controllers.GetAllUsers)
 	r.GET("/users/:username", controllers.GetUsers)
 	r.PUT("/users/:username", controllers.UpdateUser)
 	r.DELETE("/users/:username", controllers.DeleteUser)
 
+	//Require users to be authenticated
+	protected := r.Group("/try").Use(controllers.Authenticate())
+	{
+		protected.POST("/protected", func(c *gin.Context) { c.JSON(200, gin.H{"message": "Protected"}) })
+	}
 	err := r.Run("localhost:8080")
 	if err != nil {
 		log.Fatal(err)
@@ -47,6 +56,8 @@ func main() {
 
 func loadDataBase() {
 	initializers.Connect()
-	initializers.Database.AutoMigrate(&model.Entry{})
-	initializers.Database.AutoMigrate(&model.User{})
+	err := initializers.Database.AutoMigrate(&model.Post{}, &model.User{}, &model.Like{})
+	if err != nil {
+		fmt.Println(err)
+	}
 }

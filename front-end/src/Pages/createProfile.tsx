@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import TextField from "@mui/material/TextField";
 import apiClient from "../api/axiosInstance.ts";
+import UITemplate from "../components/sidebar.tsx";
 
 interface FormData {
   username: string;
@@ -21,13 +21,13 @@ const UserCreationForm: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string>('');
 
   // Handle input change
-  function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement> ) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  };
+  }
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,10 +43,10 @@ const UserCreationForm: React.FC = () => {
 
     try {
       // Send POST request to backend
-      const response = await apiClient.post('/users', formData);
+      await apiClient.post('/users', formData);
       setSuccessMessage('User created successfully!');
     } catch (err) {
-      setError('Error creating user');
+      setError(`Error creating user ${err}`);
     } finally {
       setLoading(false);
     }
@@ -64,36 +64,36 @@ const UserCreationForm: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Create User</h1>
+    <UITemplate>
+    <div className="flex flex-col flex-grow place-items-center">
+      <h1 className="text-5xl text-text mt-16 font-bold m-4">Create User</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <TextField
+          <input
+            className="bg-light m-1 p-1 text-gray-700 h-10 w-60"
+            type={"text"}
             id="outlined-basic"
-            label="username"
             name="username"
-            margin="normal"
             onChange={handleInputChange}
             required
           />
         </div>
         <div>
-          <TextField
+          <input
+            className="bg-light m-1 p-1 text-gray-700 h-10 w-60"
+            type={"text"}
             id="outlined-basic"
-            label="email"
             name="email"
-            margin="normal"
             onChange={handleInputChange}
             required
           />
         </div>
         <div>
-          <TextField
+          <input
+            className="bg-light m-1 p-1 text-gray-700 h-10 w-60"
+            type={"text"}
             id="outlined-basic"
-            label="password"
             name="password"
-            type="password"
-            margin="normal"
             onChange={handleInputChange}
             required
           />
@@ -107,6 +107,7 @@ const UserCreationForm: React.FC = () => {
       {error && <p style={{color: 'red'}}>{error}</p>}
       {successMessage && <p style={{color: 'green'}}>{successMessage}</p>}
     </div>
+    </UITemplate>
   );
 };
 
