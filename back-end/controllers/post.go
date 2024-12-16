@@ -4,6 +4,7 @@ import (
 	"backend/initializers"
 	"backend/model"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Post(c *gin.Context) {
@@ -37,6 +38,12 @@ func GetPost(c *gin.Context) {
 	c.JSON(200, gin.H{"entries": entries})
 }
 
+func GetAllPost(c *gin.Context) {
+	var entries []model.Entry
+	initializers.Database.Find(&entries)
+
+	c.JSON(200, gin.H{"entries": entries})
+}
 func UpdatePost(c *gin.Context) {
 	id := c.Param("id")
 	var body struct {
@@ -72,22 +79,41 @@ func DeletePost(c *gin.Context) {
 func CreateUser(c *gin.Context) {
 	var body struct {
 		Username string `json:"username"`
+		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 
-	c.Bind(&body)
-
-	users := model.User{
-		Username: body.Username,
-		Password: body.Password,
+	if err := c.Bind(&body); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
 	}
-	result := initializers.Database.Create(&users)
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), 14)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to hash password"})
+		return
+	}
+
+	user := model.User{
+		Username: body.Username,
+		Email:    body.Email,
+		Password: string(hashedPassword),
+	}
+
+	result := initializers.Database.Create(&user)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error})
 	} else {
 		c.JSON(200, gin.H{"message": "User created successfully"})
 	}
+}
+
+func GetAllUsers(c *gin.Context) {
+	var users []model.User
+	initializers.Database.Find(&users)
+	c.JSON(200, gin.H{"users": users})
+
 }
 
 func GetUsers(c *gin.Context) {
