@@ -31,7 +31,6 @@ func main() {
 	//Posts
 	r.POST("/posts", controllers.Post)
 	r.GET("/posts", controllers.GetAllPost)
-	r.GET("/posts/:id", controllers.GetPost)
 	r.PUT("posts/:id", controllers.UpdatePost)
 	r.DELETE("posts/:id", controllers.DeletePost)
 

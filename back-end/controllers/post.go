@@ -4,6 +4,10 @@ import (
 	"backend/initializers"
 	"backend/model"
 	"errors"
+	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -45,10 +49,56 @@ func GetPost(c *gin.Context) {
 }
 
 func GetAllPost(c *gin.Context) {
-	var post []model.Post
-	initializers.Database.Find(&post)
+	limit := 10
+	cursor := c.Query("cursor")
+	postID := c.Query("post_id")
+	userID := c.Query("user_id")
 
-	c.JSON(200, gin.H{"post": post})
+	var post []model.Post
+	var query *gorm.DB
+
+	//check cursor
+	if cursor != "" {
+			parsedCursor, err := time.Parse(time.RFC3339, cursor)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid cursor format"})
+				return
+			}
+			query = initializers.Database.Where("created_at < ?", parsedCursor)
+		} else {
+			query = initializers.Database
+		}
+
+	//check post or user requirement
+	if postID == "" && userID == "" {
+		fmt.Println("return all posts")
+	} else if postID != "" {
+		fmt.Println("find post by post id:", postID)
+		query = query.Where("post_id = ?", postID)
+	} else {
+		fmt.Println("find post by user id:", postID)
+		query = query.Where("user_id = ?", userID)
+	}
+
+	if err := query.Order("created_at DESC").Limit(limit).Find(&post).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch posts"})
+			return
+		}
+
+		// Generate the next cursor
+		var nextCursor string
+		if len(post) > 0 {
+			nextCursor = post[len(post)-1].CreatedAt.Format(time.RFC3339)
+			c.JSON(http.StatusOK, gin.H{
+			"post":       post,
+			"nextCursor": nextCursor,
+			})
+			return;
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"post": post,
+		})
 }
 
 func UpdatePost(c *gin.Context) {

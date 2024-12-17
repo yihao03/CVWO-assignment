@@ -3,9 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from "react-router"
 import './index.css'
 import PoopCount from './Pages/Poop.tsx'
-import { Users, Login } from "./Pages/users.tsx";
+import { Users, Login, UserProfile } from "./Pages/users.tsx";
 import NotFound from "./Pages/NotFound.tsx";
-import UserProfile from "./Pages/userProfile.tsx";
 import UserCreationForm from "./Pages/createProfile.tsx";
 import App from './Pages/App.tsx'
 
@@ -25,23 +24,23 @@ const router = createBrowserRouter([
     element: <Users />,
     children: [
       {
-      path: "/users/:username",
-      element: <UserProfile/>
-      },
+        path: "/users/:id",
+        element: <UserProfile />
+      }
     ]
   },
   {
-    path: "users/create",
+    path: "/users/create",
     element: <UserCreationForm />
   },
   {
-    path: "users/login",
+    path: "/users/login",
     element: <Login />
   }
 ])
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}/>'
+    <RouterProvider router={router} />'
   </StrictMode>,
 )
