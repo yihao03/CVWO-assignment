@@ -11,9 +11,10 @@ type Post struct {
 	Parent   uint   `json:"parent_id"`
 }
 
-type Like struct {
+type Vote struct {
 	gorm.Model
 	UserID uint `json:"user_id"`
 	PostID uint `json:"post_id"`
+	Vote   bool `json:"vote"`
 	Post   Post
 }

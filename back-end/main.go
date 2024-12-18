@@ -5,8 +5,9 @@ import (
 	"backend/initializers"
 	"backend/model"
 	"fmt"
-	"github.com/gin-contrib/cors"
 	"log"
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,6 +43,9 @@ func main() {
 	r.PUT("/users/:username", controllers.UpdateUser)
 	r.DELETE("/users/:username", controllers.DeleteUser)
 
+	//votes
+	r.GET("/votes", controllers.GetVotes)
+	r.POST("/votes", controllers.CreateVotes)
 	//Require users to be authenticated
 	protected := r.Group("/try").Use(controllers.Authenticate())
 	{
@@ -55,7 +59,7 @@ func main() {
 
 func loadDataBase() {
 	initializers.Connect()
-	err := initializers.Database.AutoMigrate(&model.Post{}, &model.User{}, &model.Like{})
+	err := initializers.Database.AutoMigrate(&model.Post{}, &model.User{}, &model.Vote{})
 	if err != nil {
 		fmt.Println(err)
 	}
