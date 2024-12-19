@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var Database *gorm.DB //created outside to make it global.
@@ -28,7 +29,8 @@ func Connect() {
 	// set up postgres sql to open it.
 	psqlSetup := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
 		host, port, user, dbname, pass)
-	db, errSql := gorm.Open(postgres.Open(psqlSetup), &gorm.Config{})
+	db, errSql := gorm.Open(postgres.Open(psqlSetup), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info)})
 	if errSql != nil {
 		fmt.Println("There is an error while connecting to the database ", err)
 		panic(err)

@@ -46,6 +46,8 @@ func main() {
 	//votes
 	r.GET("/votes", controllers.GetVotes)
 	r.POST("/votes", controllers.CreateVotes)
+	r.DELETE("votes", controllers.DeleteVote)
+
 	//Require users to be authenticated
 	protected := r.Group("/try").Use(controllers.Authenticate())
 	{

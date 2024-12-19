@@ -1,6 +1,8 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Post struct {
 	gorm.Model
@@ -16,5 +18,4 @@ type Vote struct {
 	UserID uint `json:"user_id"`
 	PostID uint `json:"post_id"`
 	Vote   bool `json:"vote"`
-	Post   Post
 }
