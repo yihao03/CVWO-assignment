@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import apiClient from "../api/axiosInstance";
 import { useNavigate } from "react-router";
-import Upvotes from "../controllers/votes";
+import Votes from "../controllers/votes";
 import { GetUserInfo } from "../controllers/auth";
 
 interface Post {
@@ -73,7 +73,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
     return;
   } else {
     return (
-      <div className="w-3/4 xl:w-2/3 flex flex-col">
+      <div className="w-full flex flex-col">
         {posts.map((post) => (
           <Fragment key={post.ID}>
             <div
@@ -107,13 +107,17 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                   </div>
                 )}
                 <p className="whitespace-normal max-w-full break-words line-clamp-4 text-ellipsis">
-                  {post.content}
+                  <div dangerouslySetInnerHTML={{ __html: post.content }} />
                 </p>
               </div>
               {type === "reply" && level !== undefined && level > 0 && (
-                <Posts type="reply" parent_id={post.ID} level={level - 1} />
+                <div className="ml-4">
+                  <Posts type="reply" parent_id={post.ID} level={level - 1} />
+                </div>
               )}
-              <Upvotes post_id={String(post.ID)} user={user} />
+              <div className="mt-4">
+                <Votes post_id={Number(post.ID)} user={user} />
+              </div>
             </div>
           </Fragment>
         ))}

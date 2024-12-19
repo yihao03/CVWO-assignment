@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <UITemplate>
-        <div className="flex flex-col flex-grow place-items-center">
+        <div className="flex flex-col w-5/6 lg:w-3/4 mx-auto place-items-center">
           <h1 className="text-center text-6xl text-text font-extrabold m-12">
             Welcome to this forum
           </h1>

@@ -1,6 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .toolbar-button {
+    @apply p-2 hover:bg-gray-300;
+  }
+}
 /* 
  :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

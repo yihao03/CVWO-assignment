@@ -8,7 +8,6 @@ import NotFound from "./Pages/NotFound.tsx";
 import UserCreationForm from "./Pages/createProfile.tsx";
 import Home from "./Pages/Home.tsx";
 import PostPage from "./Pages/PostPage.tsx";
-
 const router = createBrowserRouter([
   {
     path: "/",

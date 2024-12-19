@@ -9,7 +9,7 @@ interface UpvoteStatus {
   userVoted: VoteStatus;
 }
 
-export default function Upvotes({
+export default function Votes({
   post_id,
   user,
 }: {
