@@ -69,7 +69,7 @@ export default function Votes({
         .then((res) => {
           console.log(
             `vote by ${user?.username} for post ${post_id} has been removed`,
-            res
+            res,
           );
           setUpvotes((upvotes) => ({
             count: upvotes.count + +(currVote ? -1 : 1),
@@ -104,20 +104,20 @@ export default function Votes({
     }
   }
 
-  useEffect(getInitial, []);
+  useEffect(getInitial);
   return (
     <>
       <div className="flex flex-row place-items-center">
         <button
           onClick={(e) => vote(e, true)}
-          className="hover:ring-1 hover:ring-amber-950 hover:bg-dark hover:text-white flex-grow hover:grow-[2] duration-100  "
+          className="hover:bg-dark flex-grow duration-100 hover:grow-[2] hover:text-white hover:ring-1 hover:ring-amber-950"
         >
           upvote
         </button>
         <div className="p-1">{upvotes?.count}</div>
         <button
           onClick={(e) => vote(e, false)}
-          className="hover:ring-1 hover:ring-amber-950 hover:bg-dark hover:text-white flex-grow hover:grow-[2] duration-100  "
+          className="hover:bg-dark flex-grow duration-100 hover:grow-[2] hover:text-white hover:ring-1 hover:ring-amber-950"
         >
           downvote
         </button>

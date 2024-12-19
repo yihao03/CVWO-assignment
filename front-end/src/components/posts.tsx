@@ -67,17 +67,18 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
       });
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(fetchPost, [user_id, post_id]);
 
   if (posts.length === 0) {
     return;
   } else {
     return (
-      <div className="w-full flex flex-col">
+      <div className="flex w-full flex-col">
         {posts.map((post) => (
           <Fragment key={post.ID}>
             <div
-              className="bg-secondary rounded-lg p-6 m-2 w-full shadow-md h-fit ring ring-orange-950"
+              className="bg-secondary m-2 h-fit w-full rounded-lg p-6 shadow-md ring ring-orange-950"
               onClick={() => {
                 navigate(`/posts/${post.ID}`);
                 window.location.reload();
@@ -86,10 +87,10 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
               <div className="w-full">
                 {type === "post" ? (
                   <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold truncate">
+                    <h2 className="truncate text-2xl font-bold">
                       {post.title}
                     </h2>
-                    <div className="relative flex flex-col right-4 text-right">
+                    <div className="relative right-4 flex flex-col text-right">
                       <p className="">{post.username}</p>
                       <p className="">
                         {new Date(post.CreatedAt ?? "").toLocaleString()}
@@ -99,14 +100,14 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                 ) : (
                   <div>
                     <p className="text-sm">
-                      <span className="font-bold text-lg">
+                      <span className="text-lg font-bold">
                         {post.username}{" "}
                       </span>
                       {new Date(post.CreatedAt ?? "").toLocaleString()}
                     </p>
                   </div>
                 )}
-                <p className="whitespace-normal max-w-full break-words line-clamp-4 text-ellipsis">
+                <p className="line-clamp-4 max-w-full text-ellipsis whitespace-normal break-words">
                   <div dangerouslySetInnerHTML={{ __html: post.content }} />
                 </p>
               </div>

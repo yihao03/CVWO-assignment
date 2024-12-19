@@ -289,10 +289,10 @@ function MakePost({ type, parentID }: PostDetails) {
   }
 
   return editor ? (
-    <div className="flex flex-col items-center w-3/4 lg:w-1/2">
+    <div className="flex w-3/4 flex-col items-center lg:w-1/2">
       {type === "post" && <h1 className="text-2xl">What's on your mind?</h1>}
       <form
-        className="flex flex-col w-full outline outline-1 outline-gray-200 rounded p-2 bg-gray-100"
+        className="flex w-full flex-col rounded bg-gray-100 p-2 outline outline-1 outline-gray-200"
         onSubmit={handleSubmit}
       >
         {type === "post" && (
@@ -300,7 +300,7 @@ function MakePost({ type, parentID }: PostDetails) {
             type="text"
             placeholder="Title"
             onChange={(e) => setPost({ ...post, title: e.target.value })}
-            className="p-1 m-1 bg-inherit w-full"
+            className="m-1 w-full bg-inherit p-1"
           />
         )}
         {type === "reply" && (
@@ -309,9 +309,9 @@ function MakePost({ type, parentID }: PostDetails) {
             <a href={import.meta.env.VITE_BASE_URL + parentID}>Link</a>
           </p>
         )}
-        <div className="flex flex-col items-center m-2 space-y-4 outline outline-gray-200 rounded">
+        <div className="m-2 flex flex-col items-center space-y-4 rounded outline outline-gray-200">
           {/* Toolbar */}
-          <div className="flex w-full bg-gray-200 mb-0">
+          <div className="mb-0 flex w-full bg-gray-200">
             <button
               type="button"
               className="toolbar-button"
@@ -368,12 +368,12 @@ function MakePost({ type, parentID }: PostDetails) {
           {/* Editor Content */}
           <EditorContent
             editor={editor}
-            className="w-full max-w-2xl min-h-[150px] px-2"
+            className="min-h-[150px] w-full max-w-2xl px-2"
           />
         </div>
         <button
           type="submit"
-          className="text-sm text-gray-600 bg-gray-200 w-fit px-2 py-1 rounded place-self-center"
+          className="w-fit place-self-center rounded bg-gray-200 px-2 py-1 text-sm text-gray-600"
         >
           Submit
         </button>
