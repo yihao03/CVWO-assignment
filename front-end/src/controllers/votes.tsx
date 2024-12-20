@@ -104,7 +104,8 @@ export default function Votes({
     }
   }
 
-  useEffect(getInitial);
+  useEffect(getInitial, []);
+
   return (
     <>
       <div className="flex flex-row place-items-center">

@@ -22,12 +22,13 @@ interface PostProps {
   parent_id?: string;
 }
 
-type PostType = "post" | "reply";
+type PostType = "post" | "reply" | "edit";
 
 interface PostDetails {
   type: PostType;
   parentTitle?: string;
   parentID?: number;
+  postID?: number;
 }
 
 type PostStatus = "load more" | "no more posts";

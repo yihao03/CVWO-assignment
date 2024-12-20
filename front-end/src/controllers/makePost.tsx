@@ -10,9 +10,10 @@ import Placeholder from "@tiptap/extension-placeholder";
 import "./tiptap.css";
 import { MdCode, MdFormatBold, MdFormatItalic } from "react-icons/md";
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { common, createLowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { useNavigate, useParams } from "react-router";
 
 // create a lowlight instance with common languages loaded
 const lowlight = createLowlight(common);
@@ -183,6 +184,9 @@ const lowlight = createLowlight(common);
 // }
 
 function MakePost({ type, parentID }: PostDetails) {
+  const params = useParams();
+  const navigate = useNavigate();
+  const postID = params.post_id;
   const [post, setPost] = useState<Post>({
     title: type === "reply" ? `Reply to: ${parentID}` : "",
     content: "",
@@ -190,6 +194,36 @@ function MakePost({ type, parentID }: PostDetails) {
     user_id: 0,
     parent_id: parentID ?? 0,
   });
+
+  function fetchEdit() {
+    if (type !== "edit") return;
+    console.log("Editing post:", postID);
+    apiClient
+      .get(`/posts?post_id=${postID}`)
+      .then((response) => {
+        const { title, content, username, user_id, parent_id } =
+          response.data.post[0];
+        const user = GetUserInfo();
+        console.log("Editing post:", response.data.post[0]);
+        if (user && user.userID !== Number(user_id)) {
+          alert("You can only edit your own posts");
+          navigate(-1);
+          return;
+        }
+        setPost({ title, content, username, user_id, parent_id });
+      })
+      .catch((err) => {
+        console.error("Error fetching post:", err);
+        alert("Unable to fetch post, check console for details");
+      });
+  }
+
+  useEffect(fetchEdit, []);
+  useEffect(() => {
+    if (editor && type === "edit" && post.content) {
+      editor.commands.setContent(post.content);
+    }
+  }, [post.content]);
 
   //initialise tiptap rich text editor
   const editor = useEditor({
@@ -255,6 +289,7 @@ function MakePost({ type, parentID }: PostDetails) {
           "prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none focus:outline-none",
       },
     },
+    content: type === "edit" ? post.content : "",
   });
 
   async function handleSubmit(): Promise<void> {
@@ -278,13 +313,24 @@ function MakePost({ type, parentID }: PostDetails) {
       content: editor?.getHTML(),
     };
 
-    try {
-      apiClient.post("/posts", updatedPost);
-      alert("Posted successfully!");
-      window.location.reload();
-    } catch (error) {
-      console.error("Error posting:", error);
-      alert(`Failed to post: check console for details`);
+    if (type !== "edit") {
+      try {
+        apiClient.post("/posts", updatedPost);
+        alert("Posted successfully!");
+        window.location.reload();
+      } catch (error) {
+        console.error("Error posting:", error);
+        alert(`Failed to post: check console for details`);
+      }
+    } else {
+      try {
+        apiClient.put(`/posts/${postID}`, updatedPost);
+        alert("Updated successfully!");
+        navigate(`/posts/${postID}`);
+      } catch (error) {
+        console.error("Error updating post:", error);
+        alert(`Failed to update: check console for details`);
+      }
     }
   }
 
@@ -295,18 +341,20 @@ function MakePost({ type, parentID }: PostDetails) {
         className="flex w-full flex-col rounded bg-gray-100 p-2 outline outline-1 outline-gray-200"
         onSubmit={handleSubmit}
       >
-        {type === "post" && (
-          <input
-            type="text"
-            placeholder="Title"
-            onChange={(e) => setPost({ ...post, title: e.target.value })}
-            className="m-1 w-full bg-inherit p-1"
-          />
-        )}
+        {type === "post" ||
+          (type === "edit" && (
+            <input
+              type="text"
+              placeholder="Title"
+              value={type === "edit" ? post.title : ""}
+              onChange={(e) => setPost({ ...post, title: e.target.value })}
+              className="m-1 w-full bg-inherit p-1"
+              disabled={type === "edit"}
+            />
+          ))}
         {type === "reply" && (
           <p>
-            Reply to:{" "}
-            <a href={import.meta.env.VITE_BASE_URL + parentID}>Link</a>
+            Reply to: <a href={import.meta.env.VITE_BASE_URL + parentID} />
           </p>
         )}
         <div className="m-2 flex flex-col items-center space-y-4 rounded outline outline-gray-200">
@@ -368,7 +416,7 @@ function MakePost({ type, parentID }: PostDetails) {
           {/* Editor Content */}
           <EditorContent
             editor={editor}
-            className="min-h-[150px] w-full max-w-2xl px-2"
+            className="min-h-[150px] w-full px-2"
           />
         </div>
         <button

@@ -14,10 +14,10 @@ import (
 
 func Post(c *gin.Context) {
 	var body struct {
-		Username string `json:"username"`
-		UserID   uint   `json:"user_id"`
 		Title    string `json:"title"`
 		Content  string `json:"content"`
+		Username string `json:"username"`
+		UserID   uint   `json:"user_id"`
 		ParentID uint   `json:"parent_id"`
 	}
 
@@ -115,7 +115,7 @@ func UpdatePost(c *gin.Context) {
 	id := c.Param("id")
 	var body struct {
 		Title   string `json:"title"`
-		Content string `json:"body"`
+		Content string `json:"content"`
 		UserID  uint   `json:"user_id"`
 	}
 	if err := c.Bind(&body); err != nil {
@@ -127,17 +127,16 @@ func UpdatePost(c *gin.Context) {
 
 	err := initializers.Database.First(&post, id)
 
-	var userid uint = body.UserID
-	var ptr *uint = &userid
-
-	if &post.UserID != ptr {
-		c.JSON(400, gin.H{"error": "post user_id not exist"})
+	if post.UserID != body.UserID {
+		c.JSON(400, gin.H{"error": "unauthorised user"})
+		return
 	}
 
 	if errors.Is(err.Error, gorm.ErrRecordNotFound) {
 		c.JSON(404, gin.H{"error": "Post not found"})
 		return
 	}
+
 	initializers.Database.Model(&post).Updates(model.Post{
 		Title:   body.Title,
 		Content: body.Content,

@@ -8,6 +8,7 @@ import NotFound from "./Pages/NotFound.tsx";
 import UserCreationForm from "./Pages/createProfile.tsx";
 import Home from "./Pages/Home.tsx";
 import PostPage from "./Pages/PostPage.tsx";
+import { MakePost } from "./controllers/makePost.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -40,10 +41,14 @@ const router = createBrowserRouter([
     path: "/posts/:post_id",
     element: <PostPage />,
   },
+  {
+    path: "/posts/edit/:post_id",
+    element: <MakePost type="edit" />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />'
-  </StrictMode>
+  </StrictMode>,
 );

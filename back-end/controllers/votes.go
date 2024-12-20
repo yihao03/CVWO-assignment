@@ -36,8 +36,9 @@ func GetVotes(c *gin.Context) {
 	count := countUp - countDown
 
 	//check if user has voted
-	result := initializers.Database.Where("user_id = ? AND post_id = ?", UserID, PostID).First(&voted)
+
 	if UserID != "" {
+		result := initializers.Database.Where("user_id = ? AND post_id = ?", UserID, PostID).First(&voted)
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			// User has not voted
 			c.JSON(200, gin.H{
@@ -98,7 +99,7 @@ func DeleteVote(c *gin.Context) {
 	var vote model.Vote
 
 	if err := initializers.Database.
-		Where("post_id = ? AND user_id = ?", PostID, UserID).
+		Where("post_id = ? and user_id = ?", PostID, UserID).
 		First(&vote).Error; err != nil {
 		c.JSON(404, gin.H{"error": "vote not found"})
 		return
