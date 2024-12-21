@@ -1,22 +1,19 @@
-import { readBuilderProgram } from 'typescript';
+import { readBuilderProgram } from "typescript";
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  mode: 'jit',
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  mode: "jit",
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
-        primary: '#A69485',
-        secondary: '#8C6249',
-        text: '#0D0D0D',
-        light: '#D9C6BA',
-        dark: '#402319;'
-      }
+        primary: "#BFBFBF",
+        secondary: "#8C8C8C",
+        text: "#0D0D0D",
+        light: "#F2F2F2",
+        dark: "#404040",
+      },
     },
   },
   plugins: [],
-}
+};

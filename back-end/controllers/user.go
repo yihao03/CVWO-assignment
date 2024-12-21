@@ -45,25 +45,19 @@ func CreateUser(c *gin.Context) {
 	}
 }
 
-func GetAllUsers(c *gin.Context) {
-	var users []model.User
-
+func GetUsers(c *gin.Context) {
 	if id := c.Query("user_id"); id != "" {
+		//search user by id if user_id is provided
+		var users model.User
 		initializers.Database.Find(&users, id)
 		c.JSON(200, gin.H{"users": users})
 	} else {
+		//return an array of all users if no user_id is provided
+		var users []model.User
 		initializers.Database.Find(&users)
 		c.JSON(200, gin.H{"users": users})
 	}
 
-}
-
-func GetUsers(c *gin.Context) {
-	username := c.Param("username")
-	var users model.User
-	initializers.Database.Where("username = ?", username).Find(&users)
-
-	c.JSON(200, gin.H{"users": users})
 }
 
 func UpdateUser(c *gin.Context) {
@@ -72,6 +66,7 @@ func UpdateUser(c *gin.Context) {
 	var body struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
+		Bio      string `json:"bio"`
 	}
 	if err := c.Bind(&body); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
@@ -83,6 +78,7 @@ func UpdateUser(c *gin.Context) {
 	initializers.Database.Model(&users).Updates(model.User{
 		Username: body.Username,
 		Password: body.Password,
+		Bio:      body.Bio,
 	})
 
 	c.JSON(200, gin.H{"message": "User updated successfully"})

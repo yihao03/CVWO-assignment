@@ -6,11 +6,13 @@ export default function Home() {
   return (
     <>
       <UITemplate>
-        <div className="flex flex-col w-5/6 lg:w-3/4 mx-auto place-items-center">
-          <h1 className="text-center text-6xl text-text font-extrabold m-12">
+        <div className="mx-auto flex w-5/6 flex-col place-items-center lg:w-3/4">
+          <h1 className="text-text m-12 text-center text-6xl font-extrabold">
             Welcome to this forum
           </h1>
-          <MakePost type="post" />
+          <div className="lg:2/3 w-3/4">
+            <MakePost type="post" />
+          </div>
           <br />
           <Posts type="post" parent_id="0" />
         </div>

@@ -1,6 +1,6 @@
 import { Link, Outlet, useNavigate, useParams } from "react-router";
 import apiClient from "../api/axiosInstance";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import UITemplate from "../components/sidebar";
 import { GetUserInfo } from "../controllers/auth";
 import { Posts } from "../components/posts";
@@ -31,24 +31,24 @@ function Users() {
     <>
       <UITemplate>
         <>
-          <div className="overscroll-none flex flex-col h-screen items-center w-full sm:w-1/4 bg-secondary top-0">
-            <Login />
+          <div className="bg-secondary top-0 flex h-screen w-full flex-col items-center overscroll-none sm:w-1/4">
             {user.map((user) => (
-              <div
-                className="bg-primary p-8 rounded-xl m-2 w-5/6 h-fit flex flex-col text-nowrap"
-                onClick={() => {
-                  navigate(`/users/${user.ID}`);
-                  window.location.reload();
-                }}
-              >
-                <h1 className="text-3xl text-text">
-                  <span className="font-bold">User</span> {user.username}
-                </h1>
-              </div>
+              <Fragment key={user.ID}>
+                <div
+                  className="bg-primary m-2 flex h-fit w-5/6 flex-col text-nowrap rounded-xl p-8"
+                  onClick={() => {
+                    navigate(`/users/${user.ID}`);
+                  }}
+                >
+                  <h1 className="text-text text-3xl">
+                    <span className="font-bold">User</span> {user.username}
+                  </h1>
+                </div>
+              </Fragment>
             ))}
             <Link
               to="/users/create"
-              className="absolute italic text-blue-700 text-lg bottom-1"
+              className="absolute bottom-1 text-lg italic text-blue-700"
             >
               create user
             </Link>
@@ -80,6 +80,7 @@ const Login = () => {
         username: String(status.username),
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -100,51 +101,57 @@ const Login = () => {
     return <div className="text-2xl">Welcome {form.username}!</div>;
   } else {
     return (
-      <form onSubmit={handleSubmit} className="flex flex-col">
-        <input
-          onChange={(e) => setForm({ ...form, username: e.target.value })}
-          placeholder="Username"
-        />
-        <input
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          placeholder="Password"
-          type="password"
-        />
-        <button type="submit">Login</button>
-      </form>
+      <UITemplate>
+        <div className="flex h-screen grow flex-col items-center justify-center">
+          <h1 className="text-text mb-2 text-6xl font-bold">User Login</h1>
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            <input
+              className="bg-light m-1 h-10 w-96 p-1 text-gray-700"
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
+              placeholder="Username"
+            />
+            <input
+              className="bg-light m-1 h-10 w-96 p-1 text-gray-700"
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              placeholder="Password"
+              type="password"
+            />
+            <button
+              className="bg-secondary w-fit place-self-center rounded-sm px-2 py-1"
+              type="submit"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+      </UITemplate>
     );
   }
 };
 
 function UserProfile() {
-  const [user, setUser] = useState<string[]>([]);
   const { id } = useParams<{ id: string }>();
+  const [user, setUser] = useState<User>();
 
-  useEffect(() => {
+  function fetchUserInfo() {
     apiClient
-      .get("/users/" + id)
-      .then((response) => {
-        // handle success
-        console.log(response.data.users.username);
-        setUser(response.data.users.username);
+      .get(`/users?user_id=${id}`)
+      .then((res) => {
+        console.log("fetched user information: ", res);
+        setUser(res.data.users);
       })
-      .catch((error) => {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
+      .catch((err) => {
+        console.log("error fetching user info", err);
       });
-  }, [id]);
+  }
+
+  useEffect(fetchUserInfo, [id]);
 
   return (
-    <div className="flex flex-col grow m-4 items-center">
-      <h1 className="text-3xl font-bold text-text">I am {user}</h1>
-      <img
-        className="size-1/3 rounded-xl shadow object-cover"
-        src="https://media.istockphoto.com/id/1687018104/vector/vector-flat-illustration-in-grayscale-avatar-user-profile-person-icon-gender-neutral.jpg?s=612x612&w=0&k=20&c=PDi0AqXTtZ6d2Y7ahkMJEraVrC_fYCvx0HW508OWg-4="
-        alt=""
-      />
+    <div className="m-4 flex grow flex-col">
+      <h1 className="text-text ml-3 mt-8 text-4xl font-bold">
+        {user?.username}
+      </h1>
       <Posts type="post" user_id={id} />
     </div>
   );

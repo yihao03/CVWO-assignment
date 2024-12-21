@@ -218,7 +218,9 @@ function MakePost({ type, parentID }: PostDetails) {
       });
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(fetchEdit, []);
+
   useEffect(() => {
     if (editor && type === "edit" && post.content) {
       editor.commands.setContent(post.content);
@@ -335,26 +337,33 @@ function MakePost({ type, parentID }: PostDetails) {
   }
 
   return editor ? (
-    <div className="flex w-3/4 flex-col items-center lg:w-1/2">
-      {type === "post" && <h1 className="text-2xl">What's on your mind?</h1>}
+    <div className="m-4 flex grow flex-col items-center">
+      {type === "post" && (
+        <h1 className="mb-1 text-2xl">What's on your mind?</h1>
+      )}
       <form
         className="flex w-full flex-col rounded bg-gray-100 p-2 outline outline-1 outline-gray-200"
         onSubmit={handleSubmit}
       >
-        {type === "post" ||
-          (type === "edit" && (
-            <input
-              type="text"
-              placeholder="Title"
-              value={type === "edit" ? post.title : ""}
-              onChange={(e) => setPost({ ...post, title: e.target.value })}
-              className="m-1 w-full bg-inherit p-1"
-              disabled={type === "edit"}
-            />
-          ))}
+        {(type === "post" || type === "edit") && (
+          <input
+            type="text"
+            placeholder="Title"
+            value={type === "edit" ? post.title : post.title}
+            onChange={(e) => setPost({ ...post, title: e.target.value })}
+            className="m-1 w-full bg-inherit p-1"
+            disabled={type === "edit"}
+          />
+        )}
         {type === "reply" && (
           <p>
-            Reply to: <a href={import.meta.env.VITE_BASE_URL + parentID} />
+            Reply to:{" "}
+            <a
+              href={import.meta.env.VITE_BASE_URL + "posts/" + parentID}
+              className="text-blue-500 hover:text-blue-700"
+            >
+              {"Post " + parentID}
+            </a>
           </p>
         )}
         <div className="m-2 flex flex-col items-center space-y-4 rounded outline outline-gray-200">

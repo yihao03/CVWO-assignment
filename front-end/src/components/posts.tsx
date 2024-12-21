@@ -40,23 +40,32 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
   const navigate = useNavigate();
   const user = GetUserInfo();
 
-  function fetchPost() {
+  function fetchPost(replace: boolean): void {
     const params: Record<string, string | undefined> = {};
     if (user_id) params.user_id = user_id;
     if (post_id) params.post_id = post_id;
     if (parent_id) {
       params.parent_id = parent_id;
     }
+    if (replace) {
+      cursor.current = "";
+    }
 
-    console.log("fetch details:", params);
+    console.log("fetching post with params:", params);
 
     if (cursor.current) params.cursor = cursor.current;
 
     apiClient
       .get("/posts", { params: params })
       .then((response) => {
-        console.log(response.data);
-        setPosts(posts.concat(response.data.post));
+        console.log("fetched posts:", response.data);
+
+        if (replace) {
+          setPosts(response.data.post);
+        } else {
+          setPosts((prevPosts) => prevPosts.concat(response.data.post));
+        }
+
         if (response.data.nextCursor) {
           cursor.current = response.data.nextCursor;
         } else {
@@ -69,7 +78,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(fetchPost, [user_id, post_id]);
+  useEffect(() => fetchPost(true), [user_id, post_id]);
 
   if (posts.length === 0) {
     return;
@@ -79,7 +88,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
         {posts.map((post) => (
           <Fragment key={post.ID}>
             <div
-              className="bg-secondary m-2 h-fit w-full rounded-lg p-6 shadow-md ring ring-orange-950"
+              className="bg-light ring-secondary m-1 h-fit w-full rounded p-6 shadow-md ring"
               onClick={() => {
                 navigate(`/posts/${post.ID}`);
                 window.location.reload();
@@ -108,9 +117,9 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                     </p>
                   </div>
                 )}
-                <p className="line-clamp-4 max-w-full text-ellipsis whitespace-normal break-words">
+                <div className="line-clamp-4 max-w-full text-ellipsis whitespace-normal break-words">
                   <div dangerouslySetInnerHTML={{ __html: post.content }} />
-                </p>
+                </div>
               </div>
               {type === "reply" && level !== undefined && level > 0 && (
                 <div className="ml-4">
@@ -123,7 +132,14 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
             </div>
           </Fragment>
         ))}
-        {post_id === undefined && <button onClick={fetchPost}>{status}</button>}
+        {post_id === undefined && (
+          <button
+            onClick={() => fetchPost(false)}
+            disabled={status === "no more posts"}
+          >
+            {status}
+          </button>
+        )}
       </div>
     );
   }
