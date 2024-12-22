@@ -39,7 +39,7 @@ func main() {
 	r.POST("/users", controllers.CreateUser)
 	r.POST("/login", controllers.Login)
 	r.GET("/users", controllers.GetUsers)
-	r.PUT("/users/:username", controllers.UpdateUser)
+	r.PUT("/users/reset_password", controllers.UpdateUserPassword)
 	r.DELETE("/users/:username", controllers.DeleteUser)
 
 	//votes
@@ -50,6 +50,7 @@ func main() {
 	//Require users to be authenticated
 	protected := r.Group("/try").Use(controllers.Authenticate())
 	{
+		//sample
 		protected.POST("/protected", func(c *gin.Context) { c.JSON(200, gin.H{"message": "Protected"}) })
 	}
 	err := r.Run("localhost:8080")

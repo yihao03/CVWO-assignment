@@ -18,171 +18,6 @@ import { useNavigate, useParams } from "react-router";
 // create a lowlight instance with common languages loaded
 const lowlight = createLowlight(common);
 
-// function MakePost({ type, parentID }: PostDetails) {
-//   const [post, setPost] = useState<Post>({
-//     title:
-//       type === "reply"
-//         ? "Reply to: " + <a href={import.meta.env.VITE_BASE_URL + parentID} />
-//         : "",
-//     content: "",
-//     username: "",
-//     user_id: 0,
-//     parent_id: parentID ?? 0,
-//   });
-
-//   async function handleSubmit(): Promise<void> {
-//     const user: ExtendedJwtPayload | null = GetUserInfo();
-//     console.log(user);
-
-//     const contentHTML = editor?.getHTML();
-
-//     if (contentHTML !== undefined) {
-//       setPost({
-//         ...post,
-//         content: contentHTML,
-//       });
-//     }
-
-//     // If the title or content is empty, alert the user to fill both fields
-//     if (post.title === "" || post.content === "") {
-//       alert("Please write both title and content.");
-//       return;
-//     }
-
-//     if (user === null) {
-//       alert("please log in first");
-//       return;
-//     }
-
-//     console.log("User writing this post is", user);
-
-//     const updatedPost = {
-//       ...post,
-//       username: user.username === undefined ? "guest" : user.username,
-//       user_id: user.userID === undefined ? -1 : Number(user.userID),
-//     };
-
-//     try {
-//       await apiClient.post("/posts", updatedPost);
-//       alert("Posted successfully!");
-//       window.location.reload();
-//     } catch (error) {
-//       console.error("Error posting:", error);
-//       alert(`Failed to post: check console for details`);
-//     }
-//   }
-
-//   const editor = useEditor({
-//     extensions: [
-//       StarterKit.configure({
-//         // Add custom classes to the paragraph element
-//         paragraph: {
-//           HTMLAttributes: {
-//             class: "text-gray-700 leading-relaxed",
-//           },
-//         },
-//       }),
-//       Heading.configure({
-//         levels: [1, 2, 3],
-//         HTMLAttributes: {
-//           class: "font-bold text-gray-800",
-//         },
-//       }),
-//       Bold.configure({
-//         HTMLAttributes: {
-//           class: "font-semibold",
-//         },
-//       }),
-//       Italic.configure({
-//         HTMLAttributes: {
-//           class: "italic text-gray-600",
-//         },
-//       }),
-//     ],
-//     content: "<p>say something</p>",
-//     editorProps: {
-//       attributes: {
-//         class:
-//           "prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none focus:outline-none",
-//       },
-//     },
-//   });
-
-//   if (editor !== null) {
-//     return (
-//       <>
-//         <div className="flex flex-col items-center w-3/4 lg:w-1/2">
-//           {type === "post" && (
-//             <h1 className="text-2xl">What's on your mind?</h1>
-//           )}
-//           <form className="flex flex-col w-full" onSubmit={handleSubmit}>
-//             {type === "post" && (
-//               <input
-//                 type="text"
-//                 placeholder="Title"
-//                 onChange={(e) => setPost({ ...post, title: e.target.value })}
-//                 className="m-1 p-1 w-full"
-//               />
-//             )}
-//             <div className="flex flex-col items-center p-4 space-y-4">
-//               {/* Toolbar */}
-//               <div className="flex space-x-2">
-//                 <button
-//                   className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
-//                   onClick={() => editor.chain().focus().toggleBold().run()}
-//                   disabled={!editor.can().chain().focus().toggleBold().run()}
-//                 >
-//                   Bold
-//                 </button>
-//                 <button
-//                   className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
-//                   onClick={() => editor.chain().focus().toggleItalic().run()}
-//                   disabled={!editor.can().chain().focus().toggleItalic().run()}
-//                 >
-//                   Italic
-//                 </button>
-//                 <button
-//                   className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
-//                   onClick={() =>
-//                     editor.chain().focus().toggleHeading({ level: 1 }).run()
-//                   }
-//                 >
-//                   H1
-//                 </button>
-//                 <button
-//                   className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
-//                   onClick={() =>
-//                     editor.chain().focus().toggleHeading({ level: 2 }).run()
-//                   }
-//                 >
-//                   H2
-//                 </button>
-//                 <button
-//                   className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
-//                   onClick={() =>
-//                     editor.chain().focus().toggleHeading({ level: 3 }).run()
-//                   }
-//                 >
-//                   H3
-//                 </button>
-//               </div>
-
-//               {/* Editor Content */}
-//               <EditorContent
-//                 editor={editor}
-//                 className="border border-gray-300 rounded-md w-full max-w-2xl min-h-[150px] p-4 focus:outline-none"
-//               />
-//             </div>
-//             <button type="submit">Submit</button>
-//           </form>
-//         </div>
-//       </>
-//     );
-//   } else {
-//     return <p>unable to post at this time</p>;
-//   }
-// }
-
 function MakePost({ type, parentID }: PostDetails) {
   const params = useParams();
   const navigate = useNavigate();
@@ -225,6 +60,7 @@ function MakePost({ type, parentID }: PostDetails) {
     if (editor && type === "edit" && post.content) {
       editor.commands.setContent(post.content);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post.content]);
 
   //initialise tiptap rich text editor
@@ -360,7 +196,7 @@ function MakePost({ type, parentID }: PostDetails) {
             Reply to:{" "}
             <a
               href={import.meta.env.VITE_BASE_URL + "posts/" + parentID}
-              className="text-blue-500 hover:text-blue-700"
+              className="cursor-pointer text-blue-500 underline hover:text-blue-700"
             >
               {"Post " + parentID}
             </a>

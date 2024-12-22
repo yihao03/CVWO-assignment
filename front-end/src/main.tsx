@@ -3,12 +3,14 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./index.css";
 import PoopCount from "./Pages/Poop.tsx";
-import { Users, Login, UserProfile } from "./Pages/users.tsx";
+import { Users, UserProfile } from "./Pages/users.tsx";
 import NotFound from "./Pages/NotFound.tsx";
-import UserCreationForm from "./Pages/createProfile.tsx";
+import UserCreationForm from "./Pages/createUser.tsx";
 import Home from "./Pages/Home.tsx";
 import PostPage from "./Pages/PostPage.tsx";
 import { MakePost } from "./controllers/makePost.tsx";
+import { Login } from "./controllers/login.tsx";
+import UpdatePassword from "./controllers/changePassword.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -38,17 +40,21 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: "/users/reset_password",
+    element: <UpdatePassword />,
+  },
+  {
     path: "/posts/:post_id",
     element: <PostPage />,
   },
   {
-    path: "/posts/edit/:post_id",
+    path: "/posts/:post_id/edit",
     element: <MakePost type="edit" />,
   },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />'
+    <RouterProvider router={router} />
   </StrictMode>,
 );

@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/initializers"
 	"backend/model"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func CreateUser(c *gin.Context) {
@@ -60,28 +62,52 @@ func GetUsers(c *gin.Context) {
 
 }
 
-func UpdateUser(c *gin.Context) {
-	id := c.Param("username")
+func UpdateUserPassword(c *gin.Context) {
 
 	var body struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-		Bio      string `json:"bio"`
+		ID          uint   `json:"user_id"`
+		Password    string `json:"password"`
+		NewPassword string `json:"new_password"`
 	}
+
+	//bind the request body to the body struct
 	if err := c.Bind(&body); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	var users model.User
-	initializers.Database.First(&users, id)
-	initializers.Database.Model(&users).Updates(model.User{
-		Username: body.Username,
-		Password: body.Password,
-		Bio:      body.Bio,
-	})
+	var user model.User
+	check := initializers.Database.First(&user, body.ID)
 
-	c.JSON(200, gin.H{"message": "User updated successfully"})
+	if errors.Is(check.Error, gorm.ErrRecordNotFound) {
+		//return 404 if user is not found
+		c.JSON(404, gin.H{"error": "User not found"})
+		return
+	} else if check.Error != nil {
+		//return 500 if there is an error
+		c.JSON(500, gin.H{"error": check.Error})
+		return
+	} else if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err != nil {
+		//return 401 if the password is invalid
+		c.JSON(401, gin.H{"error": "Invalid password"})
+		return
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.NewPassword), 14)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to hash password"})
+		return
+	}
+
+	user.Password = string(hashedPassword)
+
+	result := initializers.Database.Model(&user).Update("password", user.Password)
+	if result.Error != nil {
+		c.JSON(500, gin.H{"error": result.Error})
+		return
+	}
+
+	c.JSON(200, gin.H{"message": "Password updated successfully"})
 }
 
 func DeleteUser(c *gin.Context) {

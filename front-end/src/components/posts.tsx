@@ -1,8 +1,9 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import apiClient from "../api/axiosInstance";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 import Votes from "../controllers/votes";
 import { GetUserInfo } from "../controllers/auth";
+import { CgOptions } from "react-icons/cg";
 
 interface Post {
   ID?: string;
@@ -33,11 +34,22 @@ interface PostDetails {
 
 type PostStatus = "load more" | "no more posts";
 
+function Options({ post_id }: { post_id: string | undefined }) {
+  return (
+    <div className="group relative flex w-full flex-row justify-between">
+      <CgOptions className="mx-auto my-2 size-4" />
+      <div className="bg-light absolute flex w-fit origin-top-left translate-x-5 scale-0 flex-col rounded-md p-2 shadow-md duration-100 group-hover:scale-100">
+        <Link to={`/posts/${post_id}/edit`}>Edit</Link>
+        <Link to={`/posts/${post_id}/delete`}>Delete</Link>
+      </div>
+    </div>
+  );
+}
+
 function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [status, setStatus] = useState<PostStatus>("load more");
   const cursor = useRef<string>("");
-  const navigate = useNavigate();
   const user = GetUserInfo();
 
   function fetchPost(replace: boolean): void {
@@ -84,63 +96,99 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
     return;
   } else {
     return (
-      <div className="flex w-full flex-col">
+      <ul className="flex w-full flex-col">
         {posts.map((post) => (
+          //Card containing post
           <Fragment key={post.ID}>
-            <div
-              className="bg-light ring-secondary m-1 h-fit w-full rounded p-6 shadow-md ring"
-              onClick={() => {
-                navigate(`/posts/${post.ID}`);
-                window.location.reload();
-              }}
+            {/* clickable post body */}
+            <Link
+              className="bg-light m-1 flex h-fit w-full flex-row justify-between rounded p-6 shadow-md"
+              to={`/posts/${post.ID}`}
+              onClick={window.location.reload}
             >
-              <div className="w-full">
-                {type === "post" ? (
-                  <div className="flex items-center justify-between">
-                    <h2 className="truncate text-2xl font-bold">
-                      {post.title}
-                    </h2>
-                    <div className="relative right-4 flex flex-col text-right">
-                      <p className="">{post.username}</p>
-                      <p className="">
-                        {new Date(post.CreatedAt ?? "").toLocaleString()}
+              <div className="m-2 flex w-full">
+                <div className="w-full">
+                  {/* title will not be shown in replies */}
+                  {type === "post" ? (
+                    <div className="flex justify-between align-bottom">
+                      <h2 className="truncate text-2xl font-bold">
+                        {post.title}
+                      </h2>
+                      <div className="relative right-4 flex flex-col text-right">
+                        <Link to={`/users/${post.user_id}`} className="text-sm">
+                          {post.username}
+                        </Link>
+                        <p className="text-secondary text-xs">
+                          {new Date(post.CreatedAt ?? "").toLocaleString(
+                            "en-UK",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                              hour12: true,
+                            },
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-sm">
+                        <span className="text-lg font-bold">
+                          {post.username}{" "}
+                        </span>
+                        {new Date(post.CreatedAt ?? "").toLocaleString(
+                          "en-UK",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            hour12: true,
+                          },
+                        )}
                       </p>
                     </div>
+                  )}
+                  <div className="">
+                    <div className="line-clamp-4 text-ellipsis whitespace-normal break-words">
+                      <p dangerouslySetInnerHTML={{ __html: post.content }} />
+                    </div>
+                    {type === "reply" && level !== undefined && level > 0 && (
+                      <div className="ml-4">
+                        <Posts
+                          type="reply"
+                          parent_id={post.ID}
+                          level={level - 1}
+                        />
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div>
-                    <p className="text-sm">
-                      <span className="text-lg font-bold">
-                        {post.username}{" "}
-                      </span>
-                      {new Date(post.CreatedAt ?? "").toLocaleString()}
-                    </p>
-                  </div>
-                )}
-                <div className="line-clamp-4 max-w-full text-ellipsis whitespace-normal break-words">
-                  <div dangerouslySetInnerHTML={{ __html: post.content }} />
                 </div>
               </div>
-              {type === "reply" && level !== undefined && level > 0 && (
-                <div className="ml-4">
-                  <Posts type="reply" parent_id={post.ID} level={level - 1} />
-                </div>
-              )}
-              <div className="mt-4">
+
+              <div className="flex w-fit flex-col justify-between">
                 <Votes post_id={Number(post.ID)} user={user} />
+                <Options post_id={post.ID} />
               </div>
-            </div>
+            </Link>
           </Fragment>
         ))}
         {post_id === undefined && (
           <button
             onClick={() => fetchPost(false)}
             disabled={status === "no more posts"}
+            className="bg-light text-secondary m-2 rounded-md p-2 text-sm shadow-md"
           >
             {status}
           </button>
         )}
-      </div>
+      </ul>
     );
   }
 }

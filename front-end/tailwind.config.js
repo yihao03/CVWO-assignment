@@ -14,6 +14,9 @@ export default {
         dark: "#404040",
       },
     },
+    fontFamily: {
+      sans: ["Roboto", "sans-serif"],
+    },
   },
   plugins: [],
 };

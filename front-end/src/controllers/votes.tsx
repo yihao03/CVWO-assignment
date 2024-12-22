@@ -1,6 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import { ExtendedJwtPayload } from "./auth";
 import apiClient from "../api/axiosInstance";
+import { FaSquareCaretUp, FaSquareCaretDown } from "react-icons/fa6";
 
 type VoteStatus = boolean | undefined;
 
@@ -54,7 +55,7 @@ export default function Votes({
   }
 
   function vote(event: React.MouseEvent<HTMLButtonElement>, vote: VoteStatus) {
-    event.stopPropagation();
+    event.preventDefault();
     console.log("params as of voting", params, upvotes);
     if (!user) {
       alert("please log in first");
@@ -72,8 +73,8 @@ export default function Votes({
             res,
           );
           setUpvotes((upvotes) => ({
-            count: upvotes.count + +(currVote ? -1 : 1),
-            userVoted: undefined,
+            ...upvotes,
+            count: upvotes.count + (currVote ? -1 : 1),
           }));
         })
         .catch((err) => {
@@ -101,26 +102,38 @@ export default function Votes({
           alert("Unable to vote, check console for details");
           console.log("unable to vote", err);
         });
+    } else {
+      setUpvotes((upvotes) => ({
+        ...upvotes,
+        userVoted: undefined,
+      }));
     }
   }
 
+  //eslint-disable-next-line
   useEffect(getInitial, []);
 
   return (
     <>
-      <div className="flex flex-row place-items-center">
-        <button
-          onClick={(e) => vote(e, true)}
-          className="hover:bg-dark flex-grow duration-100 hover:grow-[2] hover:text-white hover:ring-1 hover:ring-amber-950"
-        >
-          upvote
+      <div className="bg-primary flex flex-col place-items-center rounded p-0">
+        <button onClick={(e) => vote(e, true)}>
+          <FaSquareCaretUp
+            className={
+              upvotes.userVoted === true
+                ? "fill-secondary hover:fill-dark size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
+                : "fill-light hover:fill-secondary size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
+            }
+          />
         </button>
-        <div className="p-1">{upvotes?.count}</div>
-        <button
-          onClick={(e) => vote(e, false)}
-          className="hover:bg-dark flex-grow duration-100 hover:grow-[2] hover:text-white hover:ring-1 hover:ring-amber-950"
-        >
-          downvote
+        <div className="p-1 text-sm font-light">{upvotes?.count}</div>
+        <button onClick={(e) => vote(e, false)}>
+          <FaSquareCaretDown
+            className={
+              upvotes.userVoted === false
+                ? "fill-secondary hover:fill-dark size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
+                : "fill-light hover:fill-secondary size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
+            }
+          />
         </button>
       </div>
     </>
