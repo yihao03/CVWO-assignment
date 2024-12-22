@@ -39,7 +39,7 @@ export default function UITemplate(props: { children: React.ReactNode }) {
             link="/poop"
             text="Poop Counter"
           />
-          <div className="fixed bottom-3 text-white">
+          <div className="hover:text-primary fixed bottom-3 cursor-pointer text-white duration-75">
             <LogInOut />
           </div>
         </nav>

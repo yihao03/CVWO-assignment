@@ -266,7 +266,7 @@ function MakePost({ type, parentID }: PostDetails) {
         </div>
         <button
           type="submit"
-          className="w-fit place-self-center rounded bg-gray-200 px-2 py-1 text-sm text-gray-600"
+          className="w-fit place-self-center rounded bg-gray-200 px-2 py-1 text-sm text-gray-600 duration-100 hover:shadow-sm hover:brightness-75"
         >
           Submit
         </button>

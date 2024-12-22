@@ -181,7 +181,10 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
         ))}
         {post_id === undefined && (
           <button
-            onClick={() => fetchPost(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              fetchPost(false);
+            }}
             disabled={status === "no more posts"}
             className="bg-light text-secondary m-2 rounded-md p-2 text-sm shadow-md"
           >

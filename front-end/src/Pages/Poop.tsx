@@ -17,7 +17,6 @@ function PoopCount() {
     <>
       <UITemplate>
         <div className="flex h-screen flex-grow flex-col items-center">
-          <p className="absolute right-4">{user || "log in"}</p>
           <div className="bg-secondary text-text m-16 flex size-fit flex-col items-center rounded-2xl p-12 shadow-xl">
             <img
               src="https://www.svgrepo.com/show/402483/pile-of-poo.svg"
