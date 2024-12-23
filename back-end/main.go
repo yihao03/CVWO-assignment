@@ -21,6 +21,12 @@ func init() {
 func main() {
 	front_end := os.Getenv("FRONTEND_URL")
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default port for local development
+	}
+	router.Run(":" + port)
+
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
