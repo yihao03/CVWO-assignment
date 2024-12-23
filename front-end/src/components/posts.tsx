@@ -157,11 +157,9 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                       </div>
                     </div>
                   ) : (
-                    <div>
-                      <p className="text-sm">
-                        <span className="text-lg font-bold">
-                          {post.username}{" "}
-                        </span>
+                    <div className="flex flex-row items-center text-left">
+                      <h3 className="text-lg font-bold">{post.username} </h3>
+                      <p className="text-secondary ml-1 text-xs">
                         {new Date(post.CreatedAt ?? "").toLocaleString(
                           "en-UK",
                           {
