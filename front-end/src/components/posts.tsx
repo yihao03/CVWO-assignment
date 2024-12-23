@@ -136,7 +136,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                       <h2 className="text-ellipsis text-2xl font-bold">
                         {post.title}
                       </h2>
-                      <div className="flex flex-row items-center text-left md:flex-col md:text-right">
+                      <div className="flex flex-row items-center text-left md:flex-col md:items-end">
                         <Link to={`/users/${post.user_id}`} className="text-sm">
                           {post.username}
                         </Link>
