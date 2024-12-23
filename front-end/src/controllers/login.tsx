@@ -11,10 +11,13 @@ function LogInOut() {
   const user = useRef(GetUserInfo());
 
   function handleLogout(): void {
-    window.confirm("Are you sure you want to log out?");
-    localStorage.removeItem("token");
-    window.location.reload();
-    alert("logged out successfully");
+    if (window.confirm("Are you sure you want to log out?")) {
+      localStorage.removeItem("token");
+      window.location.reload();
+      alert("logged out successfully");
+    } else {
+      alert("ok lol");
+    }
   }
 
   if (user.current) {
@@ -63,7 +66,7 @@ function Login(): React.ReactElement {
       })
       .catch((err) => {
         console.error(err);
-        alert("login failed");
+        alert("login failed: " + err.response.data.error);
       });
   };
 
