@@ -130,7 +130,7 @@ function MakePost({ type, parentID }: PostDetails) {
     content: type === "edit" ? post.content : "",
   });
 
-  async function handleSubmit(): Promise<void> {
+  function handleSubmit(): void {
     const user: ExtendedJwtPayload | null = GetUserInfo();
     if (!user) {
       alert("Please log in first");
@@ -152,23 +152,28 @@ function MakePost({ type, parentID }: PostDetails) {
     };
 
     if (type !== "edit") {
-      try {
-        apiClient.post("/posts", updatedPost);
-        alert("Posted successfully!");
-        window.location.reload();
-      } catch (error) {
-        console.error("Error posting:", error);
-        alert(`Failed to post: check console for details`);
-      }
+      apiClient
+        .post("/posts", updatedPost)
+        .then((res) => {
+          console.log("Posted successfully:", res.data);
+          alert("Posted successfully!");
+        })
+        .catch((err) => {
+          console.error("Error posting:", err);
+          alert(`Failed to post: ` + err.data.error);
+        });
     } else {
-      try {
-        apiClient.put(`/posts/${postID}`, updatedPost);
-        alert("Updated successfully!");
-        navigate(`/posts/${postID}`);
-      } catch (error) {
-        console.error("Error updating post:", error);
-        alert(`Failed to update: check console for details`);
-      }
+      apiClient
+        .put(`/posts/${postID}`, updatedPost)
+        .then((res) => {
+          console.log("Updated successfully:", res.data);
+          alert("Updated successfully!");
+        })
+        .catch((error) => {
+          console.error("Error updating post:", error);
+          alert(`Failed to update: check console for details`);
+        });
+      navigate(`/posts/${postID}`);
     }
   }
 
