@@ -23,7 +23,7 @@ export default function UITemplate(props: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex h-full w-full overscroll-none">
-        <nav className="bg-dark left-0 top-0 flex h-screen w-fit flex-col place-items-center overscroll-none">
+        <nav className="bg-dark fixed bottom-0 left-0 z-50 flex h-fit w-full flex-row place-items-center justify-between overscroll-none md:top-0 md:h-screen md:w-fit md:flex-col md:justify-start">
           <SidebarIcon
             icon={<MdHome className="sidebar-button" />}
             link="/"
@@ -44,7 +44,7 @@ export default function UITemplate(props: { children: React.ReactNode }) {
             link="/search"
             text="Search Posts"
           />
-          <div className="hover:text-primary fixed bottom-3 cursor-pointer text-white duration-75">
+          <div className="hover:text-primary cursor-pointer text-white duration-75 md:fixed md:bottom-3">
             <LogInOut />
           </div>
         </nav>

@@ -71,7 +71,7 @@ function Users() {
                     }}
                   >
                     <h1 className="text-text overflow-hidden text-clip text-3xl">
-                      <span className="font-bold">User</span> {user.username}
+                      {user.username}
                     </h1>
                   </div>
                 </Fragment>

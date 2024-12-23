@@ -202,7 +202,7 @@ function MakePost({ type, parentID }: PostDetails) {
             </a>
           </p>
         )}
-        <div className="m-2 flex flex-col items-center space-y-4 rounded outline outline-gray-200">
+        <div className="m-2 flex flex-col items-center space-y-4 overflow-auto rounded outline outline-gray-200">
           {/* Toolbar */}
           <div className="mb-0 flex w-full bg-gray-200">
             <button

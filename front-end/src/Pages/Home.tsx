@@ -10,7 +10,7 @@ export default function Home() {
           <h1 className="text-text m-12 text-center text-6xl font-extrabold">
             Welcome to this forum
           </h1>
-          <div className="lg:2/3 w-3/4">
+          <div className="w-full md:w-3/4">
             <MakePost type="post" />
           </div>
           <br />
