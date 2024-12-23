@@ -23,7 +23,9 @@ function PoopCount() {
               alt="cute poop photo"
               className="bg-primary mb-4 size-64 rounded-xl p-4 shadow-amber-950 duration-300 hover:size-96"
             />
-            <h1 className="text-5xl font-bold shadow-sm">Best Poop Counter</h1>
+            <h1 className="text-center text-5xl font-bold shadow-sm">
+              Best Poop Counter
+            </h1>
             <p className={"mt-4 text-lg"}>
               {user || "you"} have pooped {count} times!
             </p>
