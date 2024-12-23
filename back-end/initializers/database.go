@@ -21,7 +21,7 @@ func Connect() {
 	}
 	//we read our .env file
 	host := os.Getenv("HOST")
-	port := os.Getenv("PORT")
+	port := os.Getenv("DB_PORT")
 	user := os.Getenv("USER")
 	dbname := os.Getenv("DB_NAME")
 	pass := os.Getenv("PASSWORD")

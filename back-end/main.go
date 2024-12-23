@@ -6,6 +6,7 @@ import (
 	"backend/model"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/gin-contrib/cors"
 
@@ -15,14 +16,15 @@ import (
 func init() {
 	initializers.LoadEnvVariables()
 	loadDataBase()
-
 }
-func main() {
 
+func main() {
+	port := os.Getenv("PORT")
 	r := gin.Default()
+	r.Run(":" + port)
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Access-Control-Allow-Origin"},
 		AllowCredentials: true,
