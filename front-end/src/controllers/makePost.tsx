@@ -10,7 +10,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import "./tiptap.css";
 import { MdCode, MdFormatBold, MdFormatItalic } from "react-icons/md";
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { common, createLowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { useNavigate, useParams } from "react-router";
@@ -130,7 +130,8 @@ function MakePost({ type, parentID }: PostDetails) {
     content: type === "edit" ? post.content : "",
   });
 
-  function handleSubmit(): void {
+  function handleSubmit(e: FormEvent<HTMLFormElement>): void {
+    e.preventDefault();
     const user: ExtendedJwtPayload | null = GetUserInfo();
     if (!user) {
       alert("Please log in first");
