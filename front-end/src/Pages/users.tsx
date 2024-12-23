@@ -311,7 +311,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
             </Link>
           )}
         </div>
-        <h2 className="text-text text-2xl">
+        <h2 className="text-text text-xl underline">
           {user?.email}{" "}
           {edit && (
             <button
@@ -322,7 +322,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
             </button>
           )}
         </h2>
-        <p className="text-text text-sm font-thin">
+        <p className="text-text text-sm font-thin italic">
           Member since{" "}
           {new Date(user?.CreatedAt as string).toLocaleString("en-UK", {
             year: "numeric",
@@ -330,12 +330,16 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
             day: "numeric",
           })}
         </p>
-        <h3 className="text-text text-xl">
+        <br></br>
+        <h3 className="text-text text-3xl font-medium">
           Bio:
           {edit && ChangeBio()}
         </h3>
         {user?.bio ? (
-          <p dangerouslySetInnerHTML={{ __html: user?.bio }} />
+          <p
+            className="rounded-md bg-gray-100 p-4"
+            dangerouslySetInnerHTML={{ __html: user?.bio }}
+          />
         ) : (
           <p className="italic">
             "This person is boring and has not written anything"
