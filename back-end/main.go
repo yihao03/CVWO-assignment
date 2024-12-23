@@ -20,7 +20,12 @@ func init() {
 
 func main() {
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // default port
+	}
+
 	r := gin.Default()
+	r.Run(":" + port)
 	r.Run(":" + port)
 
 	r.Use(cors.New(cors.Config{
