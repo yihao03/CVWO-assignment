@@ -69,7 +69,7 @@ func main() {
 		protected.POST("/votes", controllers.CreateVotes)
 		protected.DELETE("votes", controllers.DeleteVote)
 	}
-	err := r.Run("localhost:" + port)
+	err := r.Run(":" + port)
 	if err != nil {
 		log.Fatal(err)
 	}
