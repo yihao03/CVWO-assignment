@@ -217,7 +217,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
             className="flex w-full flex-col rounded bg-gray-100 p-2 outline outline-1 outline-gray-200"
             onSubmit={handleSubmit}
           >
-            <div className="m-2 flex flex-col items-center space-y-4 rounded outline outline-gray-200">
+            <div className="m-2 flex flex-col items-center space-y-4 rounded text-base outline outline-gray-200">
               {/* Toolbar */}
               <div className="mb-0 flex w-full bg-gray-200">
                 <button
