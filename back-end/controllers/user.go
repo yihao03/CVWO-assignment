@@ -48,16 +48,25 @@ func CreateUser(c *gin.Context) {
 }
 
 func GetUsers(c *gin.Context) {
-	if id := c.Query("user_id"); id != "" {
+	id := c.Query("user_id")
+	search := c.Query("search")
+
+	if id != "" {
 		//search user by id if user_id is provided
 		var users model.User
 		initializers.Database.Find(&users, id)
 		c.JSON(200, gin.H{"users": users})
 	} else {
-		//return an array of all users if no user_id is provided
 		var users []model.User
-		initializers.Database.Find(&users)
-		c.JSON(200, gin.H{"users": users})
+
+		if search != "" {
+			initializers.Database.Where("username LIKE ?", "%"+search+"%").Find(&users)
+			c.JSON(200, gin.H{"users": users})
+		} else {
+			//return an array of all users if no user_id is provided
+			initializers.Database.Find(&users)
+			c.JSON(200, gin.H{"users": users})
+		}
 	}
 
 }
@@ -108,6 +117,60 @@ func UpdateUserPassword(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{"message": "Password updated successfully"})
+}
+
+func UpdateUserEmail(c *gin.Context) {
+	var body struct {
+		ID    uint   `json:"user_id"`
+		Email string `json:"email"`
+	}
+
+	if err := c.Bind(&body); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user model.User
+	check := initializers.Database.First(&user, body.ID)
+
+	if errors.Is(check.Error, gorm.ErrRecordNotFound) {
+		c.JSON(404, gin.H{"error": "User not found"})
+		return
+	} else if check.Error != nil {
+		c.JSON(500, gin.H{"error": check.Error})
+		return
+	}
+
+	initializers.Database.Model(&user).Update("email", body.Email)
+
+	c.JSON(200, gin.H{"message": "Email updated successfully"})
+}
+
+func UpdateBio(c *gin.Context) {
+	var body struct {
+		ID  uint   `json:"user_id"`
+		Bio string `json:"bio"`
+	}
+
+	if err := c.Bind(&body); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	var user model.User
+	check := initializers.Database.First(&user, body.ID)
+
+	if errors.Is(check.Error, gorm.ErrRecordNotFound) {
+		c.JSON(404, gin.H{"error": "User not found"})
+		return
+	} else if check.Error != nil {
+		c.JSON(500, gin.H{"error": check.Error})
+		return
+	}
+
+	initializers.Database.Model(&user).Update("bio", body.Bio)
+
+	c.JSON(200, gin.H{"message": "Bio updated successfully"})
 }
 
 func DeleteUser(c *gin.Context) {

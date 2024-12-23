@@ -8,9 +8,11 @@ import NotFound from "./Pages/NotFound.tsx";
 import UserCreationForm from "./Pages/createUser.tsx";
 import Home from "./Pages/Home.tsx";
 import PostPage from "./Pages/PostPage.tsx";
-import { MakePost } from "./controllers/makePost.tsx";
 import { Login } from "./controllers/login.tsx";
 import UpdatePassword from "./controllers/changePassword.tsx";
+import UserEdit from "./Pages/userEdit.tsx";
+import SearchPost from "./controllers/searchPost.tsx";
+import EditPost from "./Pages/editPost.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +38,10 @@ const router = createBrowserRouter([
     element: <UserCreationForm />,
   },
   {
+    path: "/users/edit/:id",
+    element: <UserEdit />,
+  },
+  {
     path: "/users/login",
     element: <Login />,
   },
@@ -49,7 +55,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/posts/:post_id/edit",
-    element: <MakePost type="edit" />,
+    element: <EditPost />,
+  },
+  {
+    path: "/search",
+    element: <SearchPost />,
   },
 ]);
 

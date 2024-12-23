@@ -34,13 +34,35 @@ interface PostDetails {
 
 type PostStatus = "load more" | "no more posts";
 
-function Options({ post_id }: { post_id: string | undefined }) {
+function Options({
+  post_id,
+  enable,
+}: {
+  post_id: string | undefined;
+  enable: boolean;
+}): React.ReactElement {
   return (
-    <div className="group relative flex w-full flex-row justify-between">
+    <div
+      className="group relative flex w-full flex-row justify-between"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <CgOptions className="mx-auto my-2 size-4" />
-      <div className="bg-light absolute flex w-fit origin-top-left translate-x-5 scale-0 flex-col rounded-md p-2 shadow-md duration-100 group-hover:scale-100">
-        <Link to={`/posts/${post_id}/edit`}>Edit</Link>
-        <Link to={`/posts/${post_id}/delete`}>Delete</Link>
+      <div className="bg-light absolute flex w-fit origin-top-left translate-x-5 scale-0 flex-col rounded-sm p-2 text-sm shadow-md duration-100 group-hover:scale-100">
+        <Link
+          to={`/posts/${post_id}/edit`}
+          className={enable ? "" : "pointer-events-none text-gray-500"}
+        >
+          Edit
+        </Link>
+        <Link
+          to={`/posts/${post_id}/delete`}
+          className={enable ? "" : "pointer-events-none text-gray-500"}
+        >
+          Delete
+        </Link>
       </div>
     </div>
   );
@@ -156,7 +178,13 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                     </div>
                   )}
                   <div className="">
-                    <div className="line-clamp-4 text-ellipsis whitespace-normal break-words">
+                    <div
+                      className={
+                        post_id === undefined
+                          ? "line-clamp-4 text-ellipsis whitespace-normal break-words"
+                          : ""
+                      }
+                    >
                       <p dangerouslySetInnerHTML={{ __html: post.content }} />
                     </div>
                     {type === "reply" && level !== undefined && level > 0 && (
@@ -174,7 +202,10 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
 
               <div className="flex w-fit flex-col justify-between">
                 <Votes post_id={Number(post.ID)} user={user} />
-                <Options post_id={post.ID} />
+                <Options
+                  post_id={post.ID}
+                  enable={user?.userID === post.user_id}
+                />
               </div>
             </Link>
           </Fragment>

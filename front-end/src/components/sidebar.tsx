@@ -1,5 +1,5 @@
 import { FaPoop } from "react-icons/fa";
-import { MdHome, MdPerson } from "react-icons/md";
+import { MdHome, MdOutlineManageSearch, MdPerson } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { LogInOut } from "../controllers/login";
 
@@ -38,6 +38,11 @@ export default function UITemplate(props: { children: React.ReactNode }) {
             icon={<FaPoop className="sidebar-button" />}
             link="/poop"
             text="Poop Counter"
+          />
+          <SidebarIcon
+            icon={<MdOutlineManageSearch className="sidebar-button" />}
+            link="/search"
+            text="Search Posts"
           />
           <div className="hover:text-primary fixed bottom-3 cursor-pointer text-white duration-75">
             <LogInOut />

@@ -1,6 +1,5 @@
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
-
 // Extend JwtPayload to include custom claims like username and user_id
 interface ExtendedJwtPayload extends JwtPayload {
   userID?: number;
@@ -19,8 +18,13 @@ function GetUserInfo(): ExtendedJwtPayload | null {
     console.log("Decoded token:", decoded);
 
     if (decoded && decoded.exp) {
-      const currTime = Math.floor(Date.now() / 1000)
-      return decoded.exp < currTime ? null : decoded
+      const currTime = Math.floor(Date.now() / 1000);
+      if (decoded.exp < currTime) {
+        localStorage.removeItem("token");
+        return null;
+      } else {
+        return decoded;
+      }
     } else {
       return null;
     }
@@ -28,7 +32,6 @@ function GetUserInfo(): ExtendedJwtPayload | null {
     console.error("Failed to decode token:", err);
     return null;
   }
-
 }
 
 export { GetUserInfo };

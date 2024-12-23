@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -108,6 +109,30 @@ func GetAllPost(c *gin.Context) {
 	//return without cursor
 	c.JSON(http.StatusOK, gin.H{
 		"post": post,
+	})
+}
+
+func SearchPost(c *gin.Context) {
+	search := c.Query("search")
+
+	var posts []model.Post
+
+	searchArr := strings.Split(search, " ")
+
+	query := initializers.Database.Where("parent = 0")
+	for index, elem := range searchArr {
+		fmt.Println("Adding keyword:", index, elem)
+		query = query.Where("content LIKE ?", "%"+elem+"%")
+	}
+
+	//check query, bind and check for error
+	if err := query.Order("created_at DESC").Find(&posts).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch posts"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"posts": posts,
 	})
 }
 
