@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { GetUserInfo } from "./auth";
 import { useState, useEffect } from "react";
 import apiClient from "../api/axiosInstance";
@@ -83,6 +83,12 @@ function Login(): React.ReactElement {
               Login
             </button>
           </form>
+          <Link
+            to="/users/create"
+            className="m-2 cursor-pointer italic text-blue-500 hover:text-blue-700 hover:underline"
+          >
+            Create User
+          </Link>
         </div>
       </UITemplate>
     );

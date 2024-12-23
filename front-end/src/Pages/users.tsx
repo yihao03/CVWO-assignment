@@ -70,7 +70,7 @@ function Users() {
                       navigate(`/users/${user.ID}`);
                     }}
                   >
-                    <h1 className="text-text text-3xl">
+                    <h1 className="text-text overflow-hidden text-clip text-3xl">
                       <span className="font-bold">User</span> {user.username}
                     </h1>
                   </div>
