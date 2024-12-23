@@ -25,13 +25,12 @@ func main() {
 	if port == "" {
 		port = "8080" // Default port for local development
 	}
-	router.Run(":" + port)
 
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173", front_end},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Access-Control-Allow-Origin"},
 		AllowCredentials: true,
 	}))
@@ -70,7 +69,7 @@ func main() {
 		protected.POST("/votes", controllers.CreateVotes)
 		protected.DELETE("votes", controllers.DeleteVote)
 	}
-	err := r.Run("localhost:8080")
+	err := r.Run("localhost:" + port)
 	if err != nil {
 		log.Fatal(err)
 	}
