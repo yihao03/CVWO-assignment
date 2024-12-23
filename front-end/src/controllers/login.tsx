@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import apiClient from "../api/axiosInstance";
 import UITemplate from "../components/sidebar";
 import { User } from "../Pages/users";
+import { MdLogin, MdOutlineLogout } from "react-icons/md";
 
 function LogInOut() {
   const navigate = useNavigate();
@@ -16,9 +17,17 @@ function LogInOut() {
   }
 
   if (GetUserInfo()) {
-    return <button onClick={handleLogout}>logout</button>;
+    return (
+      <button onClick={handleLogout}>
+        <MdOutlineLogout className="sidebar-button" />
+      </button>
+    );
   } else {
-    return <button onClick={() => navigate("/users/login")}>login</button>;
+    return (
+      <button onClick={() => navigate("/users/login")}>
+        <MdLogin className="sidebar-button" />
+      </button>
+    );
   }
 }
 
