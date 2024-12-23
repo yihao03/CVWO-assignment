@@ -130,7 +130,7 @@ function MakePost({ type, parentID }: PostDetails) {
     content: type === "edit" ? post.content : "",
   });
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>): void {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     const user: ExtendedJwtPayload | null = GetUserInfo();
     if (!user) {
@@ -152,29 +152,26 @@ function MakePost({ type, parentID }: PostDetails) {
       content: editor?.getHTML(),
     };
 
-    if (type !== "edit") {
-      apiClient
-        .post("/posts", updatedPost)
-        .then((res) => {
-          console.log("Posted successfully:", res.data);
-          alert("Posted successfully!");
-        })
-        .catch((err) => {
-          console.error("Error posting:", err);
-          alert(`Failed to post: ` + err.data.error);
-        });
-    } else {
-      apiClient
-        .put(`/posts/${postID}`, updatedPost)
-        .then((res) => {
-          console.log("Updated successfully:", res.data);
-          alert("Updated successfully!");
-        })
-        .catch((error) => {
-          console.error("Error updating post:", error);
-          alert(`Failed to update: check console for details`);
-        });
-      navigate(`/posts/${postID}`);
+    try {
+      if (type !== "edit") {
+        const res = await apiClient.post("/posts", updatedPost);
+        console.log("Posted successfully:", res.data);
+        alert("Posted successfully!");
+        window.location.reload(); // Reload after successful post
+      } else {
+        const res = await apiClient.put(`/posts/${postID}`, updatedPost);
+        console.log("Updated successfully:", res.data);
+        alert("Updated successfully!");
+        navigate(`/posts/${postID}`); // Navigate after successful update
+      }
+    } catch (err) {
+      console.error("Error posting:", err);
+      if (err instanceof Error) {
+        // @ts-expect-error response is undefinec but is checked
+        alert(`Failed to post: ${err.response?.data?.error || err.message}`);
+      } else {
+        alert("Failed to post: An unknown error occurred");
+      }
     }
   }
 
