@@ -27,7 +27,7 @@ func Connect() {
 	pass := os.Getenv("PASSWORD")
 
 	// set up postgres sql to open it.
-	psqlSetup := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
+	psqlSetup := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=prefer",
 		host, port, user, dbname, pass)
 	db, errSql := gorm.Open(postgres.Open(psqlSetup), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info)})

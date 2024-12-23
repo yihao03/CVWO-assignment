@@ -19,17 +19,12 @@ func init() {
 }
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080" // default port
-	}
+	front_end := os.Getenv("FRONTEND_URL")
 
 	r := gin.Default()
-	r.Run(":" + port)
-	r.Run(":" + port)
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
+		AllowOrigins:     []string{"http://localhost:5173", front_end},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization", "Access-Control-Allow-Origin"},
 		AllowCredentials: true,
