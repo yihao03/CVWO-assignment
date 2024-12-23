@@ -133,10 +133,10 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                   {/* title will not be shown in replies */}
                   {type === "post" ? (
                     <div className="flex justify-between align-bottom">
-                      <h2 className="truncate text-2xl font-bold">
+                      <h2 className="flex-[3] truncate text-2xl font-bold md:flex-1">
                         {post.title}
                       </h2>
-                      <div className="relative right-4 flex flex-col text-right">
+                      <div className="collapse relative right-4 flex flex-1 flex-col text-right sm:visible">
                         <Link to={`/users/${post.user_id}`} className="text-sm">
                           {post.username}
                         </Link>
@@ -200,7 +200,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                 </div>
               </div>
 
-              <div className="flex w-fit flex-col justify-between">
+              <div className="flex w-6 flex-col justify-between">
                 <Votes post_id={Number(post.ID)} user={user} />
                 <Options
                   post_id={post.ID}
