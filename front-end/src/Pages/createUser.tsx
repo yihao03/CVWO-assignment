@@ -76,7 +76,7 @@ const UserCreationForm: React.FC = () => {
 
   return (
     <UITemplate>
-      <div className="flex flex-grow flex-col place-items-center">
+      <div className="flex flex-grow flex-col place-items-center justify-center">
         <h1 className="text-text m-4 mt-16 text-5xl font-bold">Create User</h1>
         <form onSubmit={handleSubmit} className="flex flex-col items-center">
           <div>
