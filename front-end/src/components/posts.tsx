@@ -132,15 +132,15 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                 <div className="w-full">
                   {/* title will not be shown in replies */}
                   {type === "post" ? (
-                    <div className="flex justify-between align-bottom">
-                      <h2 className="flex-[3] truncate text-2xl font-bold md:flex-1">
+                    <div className="flex flex-col justify-end md:flex-row md:justify-between">
+                      <h2 className="text-ellipsis text-2xl font-bold">
                         {post.title}
                       </h2>
-                      <div className="collapse relative right-4 flex flex-1 flex-col text-right sm:visible">
+                      <div className="flex flex-row items-center text-left md:flex-col md:text-right">
                         <Link to={`/users/${post.user_id}`} className="text-sm">
                           {post.username}
                         </Link>
-                        <p className="text-secondary text-xs">
+                        <p className="text-secondary ml-1 text-xs">
                           {new Date(post.CreatedAt ?? "").toLocaleString(
                             "en-UK",
                             {

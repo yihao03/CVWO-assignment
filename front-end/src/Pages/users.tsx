@@ -54,7 +54,7 @@ function Users() {
     <>
       <UITemplate>
         <>
-          <ul className="bg-secondary top-0 flex h-screen w-full flex-col items-center overscroll-none sm:w-1/4">
+          <ul className="bg-secondary top-0 flex h-screen w-1/4 flex-col items-center overscroll-none">
             <input
               type="text"
               onChange={handleSearch}
