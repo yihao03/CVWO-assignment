@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { GetUserInfo } from "./auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import apiClient from "../api/axiosInstance";
 import UITemplate from "../components/sidebar";
 import { User } from "../Pages/users";
@@ -8,6 +8,7 @@ import { MdLogin, MdOutlineLogout } from "react-icons/md";
 
 function LogInOut() {
   const navigate = useNavigate();
+  const user = useRef(GetUserInfo());
 
   function handleLogout(): void {
     window.confirm("Are you sure you want to log out?");
@@ -16,7 +17,7 @@ function LogInOut() {
     alert("logged out successfully");
   }
 
-  if (GetUserInfo()) {
+  if (user.current) {
     return (
       <button onClick={handleLogout}>
         <MdOutlineLogout className="sidebar-button" />

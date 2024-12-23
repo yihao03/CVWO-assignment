@@ -1,6 +1,6 @@
 import { Link, Outlet, useNavigate, useParams } from "react-router";
 import apiClient from "../api/axiosInstance";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import UITemplate from "../components/sidebar";
 import { Posts } from "../components/posts";
 import { GetUserInfo } from "../controllers/auth";
@@ -97,7 +97,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
   const [user, setUser] = useState<User>();
   const [editing, setEditing] = useState(false);
 
-  const loggedInUser = GetUserInfo();
+  const loggedInUser = useRef(GetUserInfo());
 
   function fetchUserInfo() {
     apiClient
@@ -302,14 +302,16 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
       <div className="mb-12">
         <div className="flex flex-row items-end">
           <h1 className="text-text text-4xl font-bold">{user?.username}</h1>
-          {loggedInUser !== null && loggedInUser.userID == id && !edit && (
-            <Link
-              to={`/users/edit/${id}`}
-              className="ml-2 text-sm text-blue-700"
-            >
-              Edit Profile
-            </Link>
-          )}
+          {loggedInUser.current !== null &&
+            loggedInUser.current.userID == id &&
+            !edit && (
+              <Link
+                to={`/users/edit/${id}`}
+                className="ml-2 text-sm text-blue-700"
+              >
+                Edit Profile
+              </Link>
+            )}
         </div>
         <h2 className="text-text text-xl underline">
           {user?.email}{" "}

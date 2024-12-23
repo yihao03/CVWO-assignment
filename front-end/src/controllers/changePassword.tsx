@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GetUserInfo } from "./auth";
 import apiClient from "../api/axiosInstance";
 import UITemplate from "../components/sidebar";
@@ -11,7 +11,7 @@ interface ModUser {
 }
 
 export default function UpdatePassword(): React.ReactElement {
-  const user = GetUserInfo();
+  const user = useRef(GetUserInfo());
   const navigate = useNavigate();
   const [form, setForm] = useState<ModUser>({
     user_id: -1,
@@ -20,16 +20,15 @@ export default function UpdatePassword(): React.ReactElement {
   });
 
   function initialise() {
-    if (user && user.userID) {
+    if (user.current && user.current.userID) {
       setForm({
-        user_id: Number(user.userID),
+        user_id: Number(user.current.userID),
         password: "",
         new_password: "",
       });
     }
   }
 
-  //eslint-disable-next-line
   useEffect(initialise, []);
 
   function handleSubmit(e: React.FormEvent) {

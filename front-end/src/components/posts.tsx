@@ -72,7 +72,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [status, setStatus] = useState<PostStatus>("load more");
   const cursor = useRef<string>("");
-  const user = GetUserInfo();
+  const user = useRef(GetUserInfo());
 
   function fetchPost(replace: boolean): void {
     const params: Record<string, string | undefined> = {};
@@ -201,10 +201,10 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
               </div>
 
               <div className="flex w-6 flex-col justify-between">
-                <Votes post_id={Number(post.ID)} user={user} />
+                <Votes post_id={Number(post.ID)} user={user.current} />
                 <Options
                   post_id={post.ID}
-                  enable={user?.userID === post.user_id}
+                  enable={user.current?.userID === post.user_id}
                 />
               </div>
             </Link>
