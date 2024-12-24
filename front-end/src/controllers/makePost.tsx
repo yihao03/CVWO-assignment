@@ -181,7 +181,7 @@ function MakePost({ type, parentID }: PostDetails) {
         <h1 className="mb-1 text-2xl">What's on your mind?</h1>
       )}
       <form
-        className="flex w-full flex-col rounded bg-gray-100 p-2 outline outline-1 outline-gray-200"
+        className="bg-light flex w-full flex-col rounded p-2"
         onSubmit={handleSubmit}
       >
         {(type === "post" || type === "edit") && (
@@ -205,9 +205,9 @@ function MakePost({ type, parentID }: PostDetails) {
             </a>
           </p>
         )}
-        <div className="m-2 flex flex-col items-center space-y-4 overflow-auto rounded outline outline-gray-200">
+        <div className="outline-primary m-2 flex flex-col items-center space-y-4 overflow-auto rounded outline">
           {/* Toolbar */}
-          <div className="mb-0 flex w-full bg-gray-200">
+          <div className="bg-primary mb-0 flex w-full">
             <button
               type="button"
               className="toolbar-button"

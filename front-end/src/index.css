@@ -5,11 +5,11 @@
 
 @layer components {
   .toolbar-button {
-    @apply p-2 hover:bg-gray-300;
+    @apply hover:bg-dark p-2 duration-100;
   }
 
   .sidebar-button {
-    @apply bg-secondary fill-light m-2 size-12 rounded-3xl p-2 duration-300 hover:rounded-lg hover:brightness-125;
+    @apply bg-dark fill-light m-2 size-12 rounded-3xl p-2 duration-300 hover:rounded-lg hover:brightness-125;
   }
 }
 /* 

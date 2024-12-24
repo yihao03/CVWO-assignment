@@ -13,7 +13,7 @@ export default function UITemplate(props: { children: React.ReactNode }) {
       <div className="group relative flex flex-row items-center">
         <Link to={props.link}>{props.icon}</Link>
 
-        <span className="bg-secondary absolute z-20 w-fit origin-left translate-x-16 scale-0 text-nowrap rounded-md p-2 text-slate-100 shadow-md duration-300 group-hover:scale-100">
+        <span className="bg-dark absolute z-20 w-fit origin-left translate-x-16 scale-0 text-nowrap rounded-md p-2 text-slate-100 shadow-md duration-300 group-hover:scale-100">
           {props.text}
         </span>
       </div>
@@ -23,7 +23,7 @@ export default function UITemplate(props: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex h-full w-full overscroll-none">
-        <nav className="bg-dark fixed bottom-0 left-0 z-10 flex h-16 w-full flex-row place-items-center justify-evenly overscroll-none md:static md:top-0 md:h-screen md:w-fit md:flex-col md:justify-start">
+        <nav className="bg-secondary fixed bottom-0 left-0 z-10 flex h-16 w-full flex-row place-items-center justify-evenly overscroll-none shadow md:static md:top-0 md:h-screen md:w-fit md:flex-col md:justify-start">
           <SidebarIcon
             icon={<MdHome className="sidebar-button" />}
             link="/"
