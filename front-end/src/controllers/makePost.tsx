@@ -1,6 +1,6 @@
 import { ExtendedJwtPayload, GetUserInfo } from "./auth.tsx";
 import apiClient from "../api/axiosInstance.ts";
-import { PostDetails, Post } from "../components/posts.tsx";
+import { Post, PostType } from "../components/posts.tsx";
 import { EditorContent, mergeAttributes, useEditor } from "@tiptap/react";
 import Bold from "@tiptap/extension-bold";
 import Heading from "@tiptap/extension-heading";
@@ -18,20 +18,26 @@ import { useNavigate, useParams } from "react-router";
 // create a lowlight instance with common languages loaded
 const lowlight = createLowlight(common);
 
-function MakePost({ type, parentID }: PostDetails) {
+interface MakePostDetails {
+  type: PostType;
+  parentID?: number;
+  post_prompt?: string;
+}
+
+function MakePost(props: MakePostDetails): React.ReactElement {
   const params = useParams();
   const navigate = useNavigate();
   const postID = params.post_id;
   const [post, setPost] = useState<Post>({
-    title: type === "reply" ? `Reply to: ${parentID}` : "",
+    title: props.type === "reply" ? `Reply to: ${props.parentID}` : "",
     content: "",
     username: "",
     user_id: 0,
-    parent_id: parentID ?? 0,
+    parent_id: props.parentID ?? 0,
   });
 
   function fetchEdit() {
-    if (type !== "edit") return;
+    if (props.type !== "edit") return;
     console.log("Editing post:", postID);
     apiClient
       .get(`/posts?post_id=${postID}`)
@@ -57,7 +63,7 @@ function MakePost({ type, parentID }: PostDetails) {
   useEffect(fetchEdit, []);
 
   useEffect(() => {
-    if (editor && type === "edit" && post.content) {
+    if (editor && props.type === "edit" && post.content) {
       editor.commands.setContent(post.content);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,7 +133,7 @@ function MakePost({ type, parentID }: PostDetails) {
           "prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none focus:outline-none",
       },
     },
-    content: type === "edit" ? post.content : "",
+    content: props.type === "edit" ? post.content : "",
   });
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
@@ -153,7 +159,7 @@ function MakePost({ type, parentID }: PostDetails) {
     };
 
     try {
-      if (type !== "edit") {
+      if (props.type !== "edit") {
         const res = await apiClient.post("/posts", updatedPost);
         console.log("Posted successfully:", res.data);
         alert("Posted successfully!");
@@ -177,31 +183,33 @@ function MakePost({ type, parentID }: PostDetails) {
 
   return editor ? (
     <div className="m-4 flex grow flex-col items-center">
-      {type === "post" && (
-        <h1 className="mb-1 text-2xl">What's on your mind?</h1>
+      {props.type === "post" && (
+        <h1 className="text-text mb-1 text-2xl">
+          {props.post_prompt ?? "What's on your mind?"}
+        </h1>
       )}
       <form
         className="bg-light flex w-full flex-col rounded p-2"
         onSubmit={handleSubmit}
       >
-        {(type === "post" || type === "edit") && (
+        {(props.type === "post" || props.type === "edit") && (
           <input
             type="text"
             placeholder="Title"
-            value={type === "edit" ? post.title : post.title}
+            value={props.type === "edit" ? post.title : post.title}
             onChange={(e) => setPost({ ...post, title: e.target.value })}
             className="placeholder:text-primary m-1 w-full bg-inherit p-1"
-            disabled={type === "edit"}
+            disabled={props.type === "edit"}
           />
         )}
-        {type === "reply" && (
+        {props.type === "reply" && (
           <p>
             Reply to:{" "}
             <a
-              href={import.meta.env.VITE_BASE_URL + "posts/" + parentID}
+              href={import.meta.env.VITE_BASE_URL + "posts/" + props.parentID}
               className="cursor-pointer text-blue-500 underline hover:text-blue-700"
             >
-              {"Post " + parentID}
+              {"Post " + props.parentID}
             </a>
           </p>
         )}
