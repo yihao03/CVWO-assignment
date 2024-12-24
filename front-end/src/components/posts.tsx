@@ -148,7 +148,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                   {/* title will not be shown in replies */}
                   {type === "post" ? (
                     <div className="flex flex-col justify-end md:flex-row md:justify-between">
-                      <h2 className="text-ellipsis text-2xl font-bold">
+                      <h2 className="text-wrap text-2xl font-bold">
                         {post.title}
                       </h2>
                       <div className="flex flex-row items-center text-left md:flex-col md:items-end">
