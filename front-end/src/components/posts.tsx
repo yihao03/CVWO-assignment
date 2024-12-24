@@ -139,7 +139,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
           <Fragment key={post.ID}>
             {/* clickable post body */}
             <Link
-              className="bg-light m-1 flex h-fit w-full flex-row justify-between rounded p-6 shadow-md"
+              className="bg-light m-1 flex h-fit w-full flex-row justify-between rounded p-3 shadow-md"
               to={`/posts/${post.ID}`}
               onClick={window.location.reload}
             >
@@ -230,7 +230,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
               fetchPost(false);
             }}
             disabled={status === "no more posts"}
-            className="bg-light text-secondary m-2 rounded-md p-2 text-sm shadow-md"
+            className="bg-light text-secondary m-2 flex-1 rounded-md p-2 text-sm shadow-md"
           >
             {status}
           </button>
