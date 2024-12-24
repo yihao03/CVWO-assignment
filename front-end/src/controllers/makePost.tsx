@@ -1,22 +1,13 @@
 import { ExtendedJwtPayload, GetUserInfo } from "./auth.tsx";
 import apiClient from "../api/axiosInstance.ts";
 import { Post, PostType } from "../components/posts.tsx";
-import { EditorContent, mergeAttributes, useEditor } from "@tiptap/react";
-import Bold from "@tiptap/extension-bold";
-import Heading from "@tiptap/extension-heading";
-import Italic from "@tiptap/extension-italic";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
 import "./tiptap.css";
 import { MdCode, MdFormatBold, MdFormatItalic } from "react-icons/md";
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu";
 import { FormEvent, useEffect, useState } from "react";
-import { common, createLowlight } from "lowlight";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { useNavigate, useParams } from "react-router";
-
-// create a lowlight instance with common languages loaded
-const lowlight = createLowlight(common);
+import { InitEditor } from "../components/textEditor.tsx";
+import { EditorContent } from "@tiptap/react";
 
 interface MakePostDetails {
   type: PostType;
@@ -70,72 +61,9 @@ function MakePost(props: MakePostDetails): React.ReactElement {
   }, [post.content]);
 
   //initialise tiptap rich text editor
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        paragraph: {
-          HTMLAttributes: {
-            class: "text-gray-700 leading-relaxed",
-          },
-        },
-      }),
-      Heading.configure({ levels: [1, 2, 3] }).extend({
-        //Allow heading levels
-        levels: [1, 2, 3],
-        renderHTML({ node, HTMLAttributes }) {
-          const level = this.options.levels.includes(node.attrs.level)
-            ? node.attrs.level
-            : this.options.levels[0];
+  const editor = InitEditor({ content: post.content });
 
-          type Classes = {
-            [key: number]: string;
-          };
-
-          //define classes
-          const classes: Classes = {
-            1: "text-2xl text-gray-900 font-bold",
-            2: "text-xl text-gray-800 font-semibold",
-            3: "text-lg text-gray-700 font-",
-          };
-
-          return [
-            `h${level}`,
-            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              class: `${classes[level]}`,
-            }),
-            0,
-          ];
-        },
-      }),
-      Bold.configure({
-        HTMLAttributes: {
-          class: "font-semibold",
-        },
-      }),
-      Italic.configure({
-        HTMLAttributes: {
-          class: "italic text-gray-600",
-        },
-      }),
-      Placeholder.configure({
-        placeholder: "what's on your mind?",
-      }),
-      CodeBlockLowlight.configure({
-        lowlight,
-        HTMLAttributes: {
-          class: "bg-black p-2 rounded text-gray-50",
-        },
-      }),
-    ],
-    editorProps: {
-      attributes: {
-        class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none focus:outline-none",
-      },
-    },
-    content: props.type === "edit" ? post.content : "",
-  });
-
+  //handle submission
   async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     const user: ExtendedJwtPayload | null = GetUserInfo();
@@ -272,7 +200,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
           {/* Editor Content */}
           <EditorContent
             editor={editor}
-            className="placeholder:text-primary min-h-[150px] w-full px-2"
+            className="min-h-[150px] w-full px-2"
           />
         </div>
         <button
@@ -289,3 +217,4 @@ function MakePost(props: MakePostDetails): React.ReactElement {
 }
 
 export { MakePost };
+export type { MakePostDetails };

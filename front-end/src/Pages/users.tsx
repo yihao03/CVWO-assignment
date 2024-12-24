@@ -4,16 +4,10 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import UITemplate from "../components/sidebar";
 import { Posts } from "../components/posts";
 import { GetUserInfo } from "../controllers/auth";
-import Bold from "@tiptap/extension-bold";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import Italic from "@tiptap/extension-italic";
-import Placeholder from "@tiptap/extension-placeholder";
-import { useEditor, mergeAttributes, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { Heading } from "../components/heading";
-import { common, createLowlight } from "lowlight";
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu";
 import { MdFormatBold, MdFormatItalic, MdCode } from "react-icons/md";
+import { InitEditor } from "../components/textEditor";
+import { EditorContent } from "@tiptap/react";
 
 interface User {
   ID: number;
@@ -164,73 +158,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
   }
 
   function ChangeBio(): React.ReactElement {
-    const lowlight = createLowlight(common);
-
-    const editor = useEditor({
-      extensions: [
-        StarterKit.configure({
-          paragraph: {
-            HTMLAttributes: {
-              class: "text-gray-700 leading-relaxed",
-            },
-          },
-        }),
-        Heading.configure({ levels: [1, 2, 3] }).extend({
-          //Allow heading levels
-          levels: [1, 2, 3],
-          renderHTML({ node, HTMLAttributes }) {
-            const level = this.options.levels.includes(node.attrs.level)
-              ? node.attrs.level
-              : this.options.levels[0];
-
-            type Classes = {
-              [key: number]: string;
-            };
-
-            //define classes
-            const classes: Classes = {
-              1: "text-2xl text-gray-900 font-bold",
-              2: "text-xl text-gray-800 font-semibold",
-              3: "text-lg text-gray-700 font-",
-            };
-
-            return [
-              `h${level}`,
-              mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-                class: `${classes[level]}`,
-              }),
-              0,
-            ];
-          },
-        }),
-        Bold.configure({
-          HTMLAttributes: {
-            class: "font-semibold",
-          },
-        }),
-        Italic.configure({
-          HTMLAttributes: {
-            class: "italic text-gray-600",
-          },
-        }),
-        Placeholder.configure({
-          placeholder: "Tell us about yourself",
-        }),
-        CodeBlockLowlight.configure({
-          lowlight,
-          HTMLAttributes: {
-            class: "bg-black p-2 rounded text-gray-50",
-          },
-        }),
-      ],
-      editorProps: {
-        attributes: {
-          class:
-            "prose prose-sm sm:prose lg:prose-lg xl:prose-xl max-w-none focus:outline-none",
-        },
-      },
-      content: user?.bio ?? "",
-    });
+    const editor = InitEditor({ content: user?.bio });
 
     function handleSubmit(e: React.FormEvent) {
       e.preventDefault();
@@ -266,12 +194,12 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
       return editor ? (
         <div className="m-4 flex grow flex-col items-center">
           <form
-            className="flex w-full flex-col rounded bg-gray-100 p-2 outline outline-1 outline-gray-200"
+            className="bg-light flex w-full flex-col rounded p-2"
             onSubmit={handleSubmit}
           >
-            <div className="m-2 flex flex-col items-center space-y-4 rounded text-base outline outline-gray-200">
+            <div className="outline-primary m-2 flex flex-col items-center space-y-4 rounded text-base outline">
               {/* Toolbar */}
-              <div className="mb-0 flex w-full bg-gray-200">
+              <div className="bg-primary mb-0 flex w-full">
                 <button
                   type="button"
                   className="toolbar-button"
@@ -335,7 +263,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
             </div>
             <button
               type="submit"
-              className="w-fit place-self-center rounded bg-gray-200 px-2 py-1 text-sm text-gray-600 duration-100 hover:shadow-sm hover:brightness-75"
+              className="bg-primary w-fit place-self-center rounded px-2 py-1 text-sm text-gray-600 duration-100 hover:shadow-sm hover:brightness-75"
             >
               Submit
             </button>
