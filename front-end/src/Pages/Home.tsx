@@ -28,7 +28,7 @@ export default function Home() {
       <UITemplate>
         <div className="mx-auto flex w-11/12 flex-col place-items-center md:w-5/6">
           <h1 className="text-text m-12 text-center text-6xl font-extrabold">
-            {info?.welcome ?? "Welcome!"}
+            {info?.welcome ?? "Connecting to database..."}
           </h1>
           <div className="w-full md:w-3/4">
             <MakePost type="post" post_prompt={info?.post_prompt} />
