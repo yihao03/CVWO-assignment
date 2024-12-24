@@ -148,9 +148,13 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                   {/* title will not be shown in replies */}
                   {type === "post" ? (
                     <div className="flex flex-col justify-end break-words md:flex-row md:justify-between">
-                      <h2 className="text-text text-wrap text-2xl font-bold">
+                      {/* <h2 className="text-text text-wrap text-2xl font-bold">
                         {post.title}
-                      </h2>
+                      </h2> */}
+                      <h2
+                        className="text-text text-wrap text-2xl font-extrabold"
+                        dangerouslySetInnerHTML={{ __html: post.title }}
+                      />
                       <div className="flex flex-row items-center text-left md:flex-col md:items-end">
                         <Link to={`/users/${post.user_id}`} className="text-sm">
                           {post.username}

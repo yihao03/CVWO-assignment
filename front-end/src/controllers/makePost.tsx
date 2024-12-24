@@ -20,7 +20,10 @@ function MakePost(props: MakePostDetails): React.ReactElement {
   const navigate = useNavigate();
   const postID = params.post_id;
   const [post, setPost] = useState<Post>({
-    title: props.type === "reply" ? `Reply to: ${props.parentID}` : "",
+    title:
+      props.type === "reply"
+        ? `<p>Reply to: <a href="${import.meta.env.VITE_BASE_URL}posts/${props.parentID}" class="cursor-pointer text-blue-500 underline hover:text-blue-700">Post ${props.parentID}</a></p>`
+        : "",
     content: "",
     username: "",
     user_id: 0,
@@ -120,7 +123,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
         className="bg-light flex w-full flex-col rounded p-2"
         onSubmit={handleSubmit}
       >
-        {(props.type === "post" || props.type === "edit") && (
+        {props.type === "post" || props.type === "edit" ? (
           <input
             type="text"
             placeholder="Title"
@@ -129,17 +132,8 @@ function MakePost(props: MakePostDetails): React.ReactElement {
             className="placeholder:text-primary m-1 w-full bg-inherit p-1"
             disabled={props.type === "edit"}
           />
-        )}
-        {props.type === "reply" && (
-          <p>
-            Reply to:{" "}
-            <a
-              href={import.meta.env.VITE_BASE_URL + "posts/" + props.parentID}
-              className="cursor-pointer text-blue-500 underline hover:text-blue-700"
-            >
-              {"Post " + props.parentID}
-            </a>
-          </p>
+        ) : (
+          <p>Reply to: {"Post " + props.parentID}</p>
         )}
         <div className="outline-primary m-2 flex flex-col items-center space-y-4 overflow-auto rounded outline">
           {/* Toolbar */}
