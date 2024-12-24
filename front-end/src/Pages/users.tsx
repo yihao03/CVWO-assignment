@@ -68,56 +68,19 @@ function Users() {
       //return user list
       return (
         <UITemplate>
-          <ul className="bg-secondary top-0 flex h-screen w-full flex-col items-center overscroll-none">
+          <div className="flex grow flex-col items-center">
             <input
               type="text"
               onChange={handleSearch}
-              className="bg-primary m-3 w-5/6 rounded-sm p-2"
+              className="bg-light placeholder:text-primary sticky top-0 m-3 w-11/12 rounded p-2"
               placeholder="Search users"
             />
-            {user &&
-              user.map((user) => (
-                <Fragment key={user.ID}>
-                  <div
-                    className="bg-primary m-2 flex h-fit w-5/6 flex-col text-nowrap rounded-xl p-8"
-                    onClick={() => {
-                      navigate(`/users/${user.ID}`);
-                    }}
-                  >
-                    <h1 className="text-text overflow-hidden text-clip text-3xl">
-                      {user.username}
-                    </h1>
-                  </div>
-                </Fragment>
-              ))}
-            <Link
-              to="/users/create"
-              className="absolute bottom-1 text-lg italic text-blue-700"
-            >
-              create user
-            </Link>
-          </ul>
-        </UITemplate>
-      );
-    }
-  } else {
-    //large screen UI, show user list and user profile
-    return (
-      <>
-        <UITemplate>
-          <>
-            <ul className="bg-secondary top-0 flex h-screen w-1/4 flex-col items-center overscroll-none">
-              <input
-                type="text"
-                onChange={handleSearch}
-                className="bg-primary m-3 w-5/6 rounded-sm p-2"
-                placeholder="Search users"
-              />
+            <ul className="top-0 flex w-full flex-col items-center">
               {user &&
                 user.map((user) => (
                   <Fragment key={user.ID}>
                     <div
-                      className="bg-primary m-2 flex h-fit w-5/6 flex-col text-nowrap rounded-xl p-8"
+                      className="bg-light m-2 flex h-fit w-5/6 flex-col text-nowrap rounded-xl p-8"
                       onClick={() => {
                         navigate(`/users/${user.ID}`);
                       }}
@@ -128,14 +91,50 @@ function Users() {
                     </div>
                   </Fragment>
                 ))}
-              <Link
-                to="/users/create"
-                className="absolute bottom-1 text-lg italic text-blue-700"
-              >
-                create user
-              </Link>
             </ul>
-            <div className="bg-primary flex flex-1 overflow-auto">
+            <br className="size-4" />
+          </div>
+        </UITemplate>
+      );
+    }
+  } else {
+    //large screen UI, show user list and user profile
+    return (
+      <>
+        <UITemplate>
+          <>
+            <div className="bg-secondary flex h-screen w-1/4 flex-col">
+              <input
+                type="text"
+                onChange={handleSearch}
+                className="bg-primary m-2 h-10 rounded p-2"
+                placeholder="Search users"
+              />
+              <ul className="mb-8 flex w-full flex-col items-center overflow-auto overscroll-auto">
+                {user &&
+                  user.map((user) => (
+                    <Fragment key={user.ID}>
+                      <div
+                        className="bg-primary m-2 flex h-fit w-11/12 flex-col text-nowrap rounded-xl p-8"
+                        onClick={() => {
+                          navigate(`/users/${user.ID}`);
+                        }}
+                      >
+                        <h1 className="text-text overflow-hidden text-clip text-3xl">
+                          {user.username}
+                        </h1>
+                      </div>
+                    </Fragment>
+                  ))}
+                <Link
+                  to="/users/create"
+                  className="text-primary absolute bottom-1 text-lg italic"
+                >
+                  create user
+                </Link>
+              </ul>
+            </div>
+            <div className="flex flex-1 overflow-auto">
               <Outlet />
             </div>
           </>
@@ -392,7 +391,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
         </h3>
         {user?.bio ? (
           <p
-            className="rounded-md bg-gray-100 p-4"
+            className="bg-light rounded-md p-4"
             dangerouslySetInnerHTML={{ __html: user?.bio }}
           />
         ) : (

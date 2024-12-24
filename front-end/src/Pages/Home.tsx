@@ -31,7 +31,7 @@ export default function Home() {
             {info?.welcome ?? "Welcome!"}
           </h1>
           <div className="w-full md:w-3/4">
-            <MakePost type="post" />
+            <MakePost type="post" post_prompt={info?.post_prompt} />
           </div>
           <br />
           <Posts type="post" parent_id="0" />
