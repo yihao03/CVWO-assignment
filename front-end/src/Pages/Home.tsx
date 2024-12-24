@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <>
       <UITemplate>
-        <div className="mx-auto flex w-5/6 flex-col place-items-center lg:w-3/4">
+        <div className="mx-auto flex w-11/12 flex-col place-items-center md:w-5/6">
           <h1 className="text-text m-12 text-center text-6xl font-extrabold">
             {info?.welcome ?? "Welcome!"}
           </h1>

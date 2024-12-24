@@ -190,7 +190,7 @@ function MakePost({ type, parentID }: PostDetails) {
             placeholder="Title"
             value={type === "edit" ? post.title : post.title}
             onChange={(e) => setPost({ ...post, title: e.target.value })}
-            className="m-1 w-full bg-inherit p-1"
+            className="placeholder:text-primary m-1 w-full bg-inherit p-1"
             disabled={type === "edit"}
           />
         )}
@@ -264,12 +264,12 @@ function MakePost({ type, parentID }: PostDetails) {
           {/* Editor Content */}
           <EditorContent
             editor={editor}
-            className="min-h-[150px] w-full px-2"
+            className="placeholder:text-primary min-h-[150px] w-full px-2"
           />
         </div>
         <button
           type="submit"
-          className="w-fit place-self-center rounded bg-gray-200 px-2 py-1 text-sm text-gray-600 duration-100 hover:shadow-sm hover:brightness-75"
+          className="bg-primary text-light w-fit place-self-center rounded px-2 py-1 text-sm duration-100 hover:shadow-sm hover:brightness-75"
         >
           Submit
         </button>
