@@ -119,7 +119,7 @@ func SearchPost(c *gin.Context) {
 
 	searchArr := strings.Split(search, " ")
 
-	query := initializers.Database.Where("parent = 0")
+	query := initializers.Database
 	for index, elem := range searchArr {
 		fmt.Println("Adding keyword:", index, elem)
 		query = query.Where("content LIKE ?", "%"+elem+"%")
