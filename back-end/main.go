@@ -36,6 +36,10 @@ func main() {
 	}))
 
 	loadDataBase()
+
+	//Info
+	r.GET("/info", controllers.GetInfo)
+
 	//Posts
 	r.GET("/posts", controllers.GetAllPost)
 	r.GET("/posts/search", controllers.SearchPost)
@@ -77,7 +81,7 @@ func main() {
 
 func loadDataBase() {
 	initializers.Connect()
-	err := initializers.Database.AutoMigrate(&model.Post{}, &model.User{}, &model.Vote{})
+	err := initializers.Database.AutoMigrate(&model.Post{}, &model.User{}, &model.Vote{}, &model.Info{})
 	if err != nil {
 		fmt.Println(err)
 	}
