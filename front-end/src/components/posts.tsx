@@ -41,6 +41,21 @@ function Options({
   post_id: string | undefined;
   enable: boolean;
 }): React.ReactElement {
+  function handleDelete(): void {
+    if (post_id) {
+      apiClient
+        .delete(`/posts/${post_id}`)
+        .then((response) => {
+          console.log("deleted post:", response.data);
+          alert("Post deleted successfully!");
+          window.location.reload();
+        })
+        .catch((err: Error): void => {
+          console.log(err);
+          alert("Failed to delete post. Please try again later.");
+        });
+    }
+  }
   return (
     <div
       className="group relative flex w-full flex-row justify-between"
@@ -57,12 +72,12 @@ function Options({
         >
           Edit
         </Link>
-        <Link
-          to={`/posts/${post_id}/delete`}
+        <div
+          onClick={handleDelete}
           className={enable ? "" : "pointer-events-none text-gray-500"}
         >
           Delete
-        </Link>
+        </div>
       </div>
     </div>
   );
