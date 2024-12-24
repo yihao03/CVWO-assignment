@@ -139,11 +139,11 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
           <Fragment key={post.ID}>
             {/* clickable post body */}
             <Link
-              className="bg-light m-1 flex h-fit w-full flex-row justify-between rounded p-3 shadow-md"
+              className="bg-light relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow-md"
               to={`/posts/${post.ID}`}
               onClick={window.location.reload}
             >
-              <div className="m-2 flex w-full">
+              <div className="m-2 mr-8 flex w-full">
                 <div className="w-full">
                   {/* title will not be shown in replies */}
                   {type === "post" ? (
@@ -213,7 +213,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                 </div>
               </div>
 
-              <div className="flex w-6 flex-col justify-between">
+              <div className="absolute right-2 justify-between">
                 <Votes post_id={Number(post.ID)} user={user.current} />
                 <Options
                   post_id={post.ID}
