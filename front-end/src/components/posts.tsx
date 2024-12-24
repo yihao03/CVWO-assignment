@@ -65,7 +65,7 @@ function Options({
       }}
     >
       <CgOptions className="mx-auto my-2 size-4" />
-      <div className="bg-light absolute flex w-fit origin-top-left translate-x-5 scale-0 flex-col rounded-sm p-2 text-sm shadow-md duration-100 group-hover:scale-100">
+      <div className="bg-light absolute z-30 flex w-fit origin-top-right -translate-x-12 translate-y-5 scale-0 flex-col rounded-sm p-2 text-sm shadow-md duration-100 group-hover:scale-100 md:origin-top-left md:translate-x-5">
         <Link
           to={`/posts/${post_id}/edit`}
           className={enable ? "" : "pointer-events-none text-gray-500"}
