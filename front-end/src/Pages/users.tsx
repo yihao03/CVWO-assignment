@@ -278,61 +278,63 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
   useEffect(fetchUserInfo, [id]);
 
   return (
-    <div className="m-4 grow">
-      <div className="mb-12">
-        <div className="flex flex-row items-end">
-          <h1 className="text-text text-4xl font-bold">{user?.username}</h1>
-          {loggedInUser.current !== null &&
-            loggedInUser.current.userID == id &&
-            !edit && (
-              <Link
-                to={`/users/edit/${id}`}
-                className="ml-2 text-sm text-blue-700"
+    <>
+      <div className="m-4 grow">
+        <div className="mb-12">
+          <div className="flex flex-row items-end">
+            <h1 className="text-text text-4xl font-bold">{user?.username}</h1>
+            {loggedInUser.current !== null &&
+              loggedInUser.current.userID == id &&
+              !edit && (
+                <Link
+                  to={`/users/edit/${id}`}
+                  className="ml-2 text-sm text-blue-700"
+                >
+                  Edit Profile
+                </Link>
+              )}
+          </div>
+          <h2 className="text-text text-xl underline">
+            {user?.email}{" "}
+            {edit && (
+              <button
+                className="ml-2 cursor-pointer text-sm font-thin text-blue-700"
+                onClick={handleChangeEmail}
               >
-                Edit Profile
-              </Link>
+                change email
+              </button>
             )}
-        </div>
-        <h2 className="text-text text-xl underline">
-          {user?.email}{" "}
-          {edit && (
-            <button
-              className="ml-2 cursor-pointer text-sm font-thin text-blue-700"
-              onClick={handleChangeEmail}
-            >
-              change email
-            </button>
-          )}
-        </h2>
-        <p className="text-text text-sm font-thin italic">
-          Member since{" "}
-          {new Date(user?.CreatedAt as string).toLocaleString("en-UK", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </p>
-        <br></br>
-        <h3 className="text-text text-3xl font-medium">
-          Bio:
-          {edit && ChangeBio()}
-        </h3>
-        {user?.bio ? (
-          <p
-            className="bg-light rounded-md p-4"
-            dangerouslySetInnerHTML={{ __html: user?.bio }}
-          />
-        ) : (
-          <p className="italic">
-            "This person is boring and has not written anything"
+          </h2>
+          <p className="text-text text-sm font-thin italic">
+            Member since{" "}
+            {new Date(user?.CreatedAt as string).toLocaleString("en-UK", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
-        )}
+          <br></br>
+          <h3 className="text-text text-3xl font-medium">
+            Bio:
+            {edit && ChangeBio()}
+          </h3>
+          {user?.bio ? (
+            <p
+              className="bg-light rounded-md p-4"
+              dangerouslySetInnerHTML={{ __html: user?.bio }}
+            />
+          ) : (
+            <p className="italic">
+              "This person is boring and has not written anything"
+            </p>
+          )}
+        </div>
+        <h1 className="text-text text-2xl font-bold">Posts</h1>
+        <div>
+          <Posts type="post" user_id={id} parent_id="0" />
+        </div>
       </div>
-      <h1 className="text-text text-2xl font-bold">Posts</h1>
-      <div>
-        <Posts type="post" user_id={id} parent_id="0" />
-      </div>
-    </div>
+    </>
   );
 }
 
