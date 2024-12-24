@@ -143,11 +143,11 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
               to={`/posts/${post.ID}`}
               onClick={window.location.reload}
             >
-              <div className="m-2 mr-8 flex w-full">
+              <div className="m-2 mr-8 flex w-[calc(100%-8px)]">
                 <div className="w-full">
                   {/* title will not be shown in replies */}
                   {type === "post" ? (
-                    <div className="flex flex-col justify-end md:flex-row md:justify-between">
+                    <div className="flex flex-col justify-end break-words md:flex-row md:justify-between">
                       <h2 className="text-wrap text-2xl font-bold">
                         {post.title}
                       </h2>
