@@ -209,6 +209,7 @@ func Login(c *gin.Context) {
 	claims := jwt.MapClaims{
 		"userID":   user.ID,
 		"username": user.Username,
+		"admin": user.Admin,
 		"exp":      time.Now().Add(24 * time.Hour).Unix(),
 		"iat":      time.Now().Unix(),
 	}
