@@ -4,6 +4,7 @@ import { JwtPayload, jwtDecode } from "jwt-decode";
 interface ExtendedJwtPayload extends JwtPayload {
   userID?: number;
   username?: string;
+  admin?: boolean;
 }
 
 function GetUserInfo(): ExtendedJwtPayload | null {

@@ -221,7 +221,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                 <Votes post_id={Number(post.ID)} user={user.current} />
                 <Options
                   post_id={post.ID}
-                  enable={user.current?.userID === post.user_id}
+                  enable={user.current?.userID === post.user_id || user.current?.admin === true}
                 />
               </div>
             </Link>
