@@ -152,14 +152,30 @@ func UpdatePost(c *gin.Context) {
 
 	err := initializers.Database.First(&post, id)
 
-	if post.UserID != body.UserID {
-		c.JSON(400, gin.H{"error": "unauthorised user"})
-		return
-	}
-
+	//check if post is in the database
 	if errors.Is(err.Error, gorm.ErrRecordNotFound) {
 		c.JSON(404, gin.H{"error": "Post not found"})
 		return
+	}
+
+	//check if user is authorised to edit post
+	if post.UserID != body.UserID {
+
+		//if editor is not the author of the post, check if user is admin
+		var user model.User
+		result := initializers.Database.First(&user, body.UserID)
+
+		if result.Error != nil {
+			c.JSON(400, gin.H{"error": "User not found"})
+			return
+		}
+
+		//if user is not admin, return an error
+		if !user.Admin {
+			c.JSON(400, gin.H{"error": "unauthorised user"})
+			return
+		}
+
 	}
 
 	initializers.Database.Model(&post).Updates(model.Post{
