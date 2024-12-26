@@ -94,7 +94,7 @@ The app is designed to provide an intuitive, simple, and customizable experience
 2. **Secondary**
 3. **Light**
 4. **Dark**
-5. **Test**
+5. **Text**
 
 These colors are configurable in `tailwind.config.js` with future plans to allow for color customization via the `.env` file or database.
 
