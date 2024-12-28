@@ -11,7 +11,6 @@ type Post struct {
 	Title    string `gorm:"size:255" json:"title"`
 	Content  string `gorm:"type:text" json:"content"`
 	Pinned   bool   `json:"pinned"`
-	Tag      string `json:"tag"`
 	Parent   uint   `json:"parent_id"`
 	Tag      string `gorm:"default:general" json:"tag"`
 }
@@ -21,9 +20,4 @@ type Vote struct {
 	UserID uint `json:"user_id"`
 	PostID uint `json:"post_id"`
 	Vote   bool `json:"vote"`
-}
-
-type Tag struct {
-	gorm.Model
-	Tag string
 }
