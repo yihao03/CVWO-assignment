@@ -41,7 +41,7 @@ export default function UpdatePassword(): React.ReactElement {
         console.log("Reset password status", res.data);
         alert("Password updated successfully");
         localStorage.removeItem("token");
-        navigate("/login");
+        navigate("/users/login");
       })
       .catch((err) => {
         console.error("Failed to update password:", err);
