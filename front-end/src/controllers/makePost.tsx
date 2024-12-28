@@ -78,7 +78,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
           response.data.post[0];
         const user = GetUserInfo();
         console.log("Editing post:", response.data.post[0]);
-        if (user && user.userID !== Number(user_id)) {
+        if (user && !(user.userID === Number(user_id) || user.admin)) {
           alert("You can only edit your own posts");
           navigate(-1);
           return;

@@ -238,7 +238,7 @@ function Posts({
                 <Votes post_id={Number(post.ID)} user={user.current} />
                 <Options
                   post_id={post.ID}
-                  enable={user.current?.userID === post.user_id}
+                  enable={user.current?.userID === post.user_id || user.current?.admin === true}
                 />
               </div>
             </Link>
