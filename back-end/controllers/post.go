@@ -20,6 +20,7 @@ func Post(c *gin.Context) {
 		Username string `json:"username"`
 		UserID   uint   `json:"user_id"`
 		ParentID uint   `json:"parent_id"`
+		Tag      string `json:"tag"`
 	}
 
 	if err := c.Bind(&body); err != nil {
@@ -33,6 +34,7 @@ func Post(c *gin.Context) {
 		Title:    body.Title,
 		Content:  body.Content,
 		Parent:   body.ParentID,
+		Tag:      body.Tag,
 	}
 	result := initializers.Database.Create(&post)
 
@@ -57,6 +59,7 @@ func GetAllPost(c *gin.Context) {
 	postID := c.Query("post_id")
 	userID := c.Query("user_id")
 	parent := c.Query("parent_id")
+	tag := c.Query("tag")
 
 	var post []model.Post
 	query := initializers.Database
@@ -87,6 +90,12 @@ func GetAllPost(c *gin.Context) {
 	if parent != "" {
 		fmt.Println("find post by parent id:", parent)
 		query = query.Where("parent = ?", parent)
+	}
+
+	//add tags to query if available
+	if tag != "" {
+		fmt.Println("find post by tag id:", tag)
+		query = query.Where("tag = ?", tag)
 	}
 
 	//check query, bind and check for error

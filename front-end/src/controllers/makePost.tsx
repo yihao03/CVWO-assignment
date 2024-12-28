@@ -4,10 +4,12 @@ import { Post, PostType } from "../components/posts.tsx";
 import "./tiptap.css";
 import { MdCode, MdFormatBold, MdFormatItalic } from "react-icons/md";
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { InitEditor } from "../components/textEditor.tsx";
 import { EditorContent } from "@tiptap/react";
+import { Tags } from "../Pages/Home.tsx";
+import { FaTags } from "react-icons/fa";
 
 interface MakePostDetails {
   type: PostType;
@@ -28,7 +30,43 @@ function MakePost(props: MakePostDetails): React.ReactElement {
     username: "",
     user_id: 0,
     parent_id: props.parentID ?? 0,
+    tag: props.type === "reply" ? "reply" : "general",
   });
+  const tags = useRef<Tags[] | null>(
+    JSON.parse(localStorage.getItem("tags") ?? "[]"),
+  );
+
+  function Tags(): React.ReactElement {
+    const [open, setOpen] = useState<boolean>(false);
+    return (
+      <div
+        onClick={() => setOpen(!open)}
+        className="group relative m-2 flex flex-col"
+      >
+        <div className="bg-dark text-light flex w-fit flex-row items-center rounded-full p-1 px-2 text-xs">
+          <FaTags className="mr-1" />
+          {post.tag}
+        </div>
+        <div
+          className={
+            open
+              ? "bg-light absolute flex translate-y-6 flex-col shadow-md"
+              : "hidden"
+          }
+        >
+          {tags.current &&
+            tags.current.map((tag: Tags) => (
+              <button
+                onClick={() => setPost({ ...post, tag: tag.tag })}
+                className="p-1"
+              >
+                {tag.tag}
+              </button>
+            ))}
+        </div>
+      </div>
+    );
+  }
 
   function fetchEdit() {
     if (props.type !== "edit") return;
@@ -36,7 +74,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
     apiClient
       .get(`/posts?post_id=${postID}`)
       .then((response) => {
-        const { title, content, username, user_id, parent_id } =
+        const { title, content, username, user_id, parent_id, tag } =
           response.data.post[0];
         const user = GetUserInfo();
         console.log("Editing post:", response.data.post[0]);
@@ -45,7 +83,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
           navigate(-1);
           return;
         }
-        setPost({ title, content, username, user_id, parent_id });
+        setPost({ title, content, username, user_id, parent_id, tag });
       })
       .catch((err) => {
         console.error("Error fetching post:", err);
@@ -89,12 +127,19 @@ function MakePost(props: MakePostDetails): React.ReactElement {
       content: editor?.getHTML(),
     };
 
+    console.log("Posting:", updatedPost);
+
     try {
-      if (props.type !== "edit") {
+      if (props.type === "reply") {
+        const res = await apiClient.post("/posts", updatedPost);
+        console.log("Replied successfully:", res.data);
+        alert("Replied successfully!");
+        window.location.reload(); // Reload after successful post
+      } else if (props.type === "post") {
         const res = await apiClient.post("/posts", updatedPost);
         console.log("Posted successfully:", res.data);
         alert("Posted successfully!");
-        window.location.reload(); // Reload after successful post
+        navigate(-1);
       } else {
         const res = await apiClient.put(`/posts/${postID}`, updatedPost);
         console.log("Updated successfully:", res.data);
@@ -114,11 +159,6 @@ function MakePost(props: MakePostDetails): React.ReactElement {
 
   return editor ? (
     <div className="m-4 flex grow flex-col items-center">
-      {props.type === "post" && (
-        <h1 className="text-text mb-1 text-2xl">
-          {props.post_prompt ?? "What's on your mind?"}
-        </h1>
-      )}
       <form
         className="bg-light flex w-full flex-col rounded p-2"
         onSubmit={handleSubmit}
@@ -135,6 +175,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
         ) : (
           <p>Reply to: {"Post " + props.parentID}</p>
         )}
+        <Tags />
         <div className="outline-primary m-2 flex flex-col items-center space-y-4 overflow-auto rounded outline">
           {/* Toolbar */}
           <div className="bg-primary mb-0 flex w-full">

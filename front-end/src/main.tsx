@@ -7,12 +7,13 @@ import { Users, UserProfile } from "./Pages/users.tsx";
 import NotFound from "./Pages/NotFound.tsx";
 import UserCreationForm from "./Pages/createUser.tsx";
 import Home from "./Pages/Home.tsx";
-import PostPage from "./Pages/PostPage.tsx";
+import ViewPost from "./Pages/ViewPost.tsx";
 import { Login } from "./controllers/login.tsx";
 import UpdatePassword from "./controllers/changePassword.tsx";
 import UserEdit from "./Pages/userEdit.tsx";
 import SearchPost from "./controllers/searchPost.tsx";
 import EditPost from "./Pages/editPost.tsx";
+import CreatePost from "./Pages/CreatePost.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/poop",
     element: <PoopCount />,
+  },
+  {
+    path: "/post",
+    element: <CreatePost />,
   },
   {
     path: "/users",
@@ -51,7 +56,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/posts/:post_id",
-    element: <PostPage />,
+    element: <ViewPost />,
   },
   {
     path: "/posts/:post_id/edit",

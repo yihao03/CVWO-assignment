@@ -2,14 +2,70 @@ import { useEffect, useState } from "react";
 import apiClient from "../api/axiosInstance.ts";
 import { Posts } from "../components/posts.tsx";
 import UITemplate from "../components/sidebar.tsx";
-import { MakePost } from "../controllers/makePost.tsx";
+import { Link } from "react-router-dom";
 
 interface InfoResponse {
   [key: string]: string; // Use 'any' if the value types are mixed, otherwise specify the type
 }
 
+interface Tags {
+  ID: number;
+  CreatedAt: string;
+  UpdatedAt: string;
+  DeletedAt: string;
+  tag: string;
+}
 export default function Home() {
   const [info, setInfo] = useState<InfoResponse | null>(null);
+  const [tagged, setTagged] = useState<string | undefined>(undefined);
+
+  function TagBar() {
+    const [tags, setTags] = useState<Tags[] | null>(null);
+    useEffect(() => {
+      apiClient
+        .get("/tags")
+        .then((response) => {
+          console.log("Tags: ", response.data.tags);
+          localStorage.setItem("tags", JSON.stringify(response.data.tags));
+          setTags(response.data.tags);
+        })
+        .catch((err: Error): void => {
+          console.log("Error fetching tags: ", err);
+        });
+    }, []);
+
+    return (
+      <>
+        <div className="text-text flex flex-row">
+          <button
+            onClick={() => setTagged(undefined)}
+            className={
+              "text-text bg-primary m-0 h-full p-1 px-2 text-lg duration-300 hover:brightness-125" +
+              " " +
+              (tagged === undefined ? "border-light border-b-2" : "")
+            }
+          >
+            all
+          </button>
+          {tags?.map((tag) => (
+            <button
+              onClick={() => {
+                setTagged(tag.tag);
+              }}
+              className={
+                "text-text bg-primary m-0 h-full p-1 px-2 text-lg duration-300 hover:brightness-125" +
+                " " +
+                (tagged === tag.tag ? "border-light border-b-2" : "")
+              }
+            >
+              {tag.tag}
+            </button>
+          ))}
+        </div>
+      </>
+    );
+  }
+
   function Init() {
     apiClient
       .get("/info")
@@ -30,13 +86,19 @@ export default function Home() {
           <h1 className="text-text m-12 text-center text-6xl font-extrabold">
             {info?.welcome ?? "Connecting to database..."}
           </h1>
-          <div className="w-full md:w-3/4">
-            <MakePost type="post" post_prompt={info?.post_prompt} />
-          </div>
+          <Link
+            to="/post"
+            className="bg-light text-text mx-auto w-1/2 rounded-full p-2 px-4 shadow-md"
+          >
+            {info?.post_prompt ?? "What's on your mind?"}
+          </Link>
           <br />
-          <Posts type="post" parent_id="0" />
+          <TagBar />
+          <Posts type="post" parent_id="0" tag={tagged} />
         </div>
       </UITemplate>
     </>
   );
 }
+
+export type { Tags, InfoResponse };

@@ -11,6 +11,7 @@ type Post struct {
 	Title    string `gorm:"size:255" json:"title"`
 	Content  string `gorm:"type:text" json:"content"`
 	Parent   uint   `json:"parent_id"`
+	Tag      string `gorm:"default:general" json:"tag"`
 }
 
 type Vote struct {

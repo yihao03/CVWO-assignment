@@ -1,9 +1,9 @@
 import { useParams } from "react-router";
-import { Posts } from "../components/posts";
+import { Posts } from "../components/posts.tsx";
 import UITemplate from "../components/sidebar.tsx";
 import { MakePost } from "../controllers/makePost.tsx";
 
-export default function PostPage() {
+export default function ViewPost() {
   const params = useParams();
   const post_id = params.post_id;
   return (

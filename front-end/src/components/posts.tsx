@@ -13,14 +13,16 @@ interface Post {
   content: string;
   CreatedAt?: string;
   parent_id?: number;
+  tag: string;
 }
 
-interface PostProps {
+interface PostParams {
   type: PostType;
   level?: number;
   user_id?: string;
   post_id?: string;
   parent_id?: string;
+  tag?: string;
 }
 
 type PostType = "post" | "reply" | "edit";
@@ -83,7 +85,14 @@ function Options({
   );
 }
 
-function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
+function Posts({
+  type,
+  level = 1,
+  user_id,
+  post_id,
+  parent_id,
+  tag,
+}: PostParams) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [status, setStatus] = useState<PostStatus>("load more");
   const cursor = useRef<string>("");
@@ -93,6 +102,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
     const params: Record<string, string | undefined> = {};
     if (user_id) params.user_id = user_id;
     if (post_id) params.post_id = post_id;
+    if (tag) params.tag = tag;
     if (parent_id) {
       params.parent_id = parent_id;
     }
@@ -127,7 +137,7 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => fetchPost(true), [user_id, post_id]);
+  useEffect(() => fetchPost(true), [user_id, post_id, tag]);
 
   if (posts.length === 0) {
     return;
@@ -151,10 +161,17 @@ function Posts({ type, level = 1, user_id, post_id, parent_id }: PostProps) {
                       {/* <h2 className="text-text text-wrap text-2xl font-bold">
                         {post.title}
                       </h2> */}
-                      <h2
-                        className="text-text text-wrap text-2xl font-extrabold"
-                        dangerouslySetInnerHTML={{ __html: post.title }}
-                      />
+                      <div className="flex flex-col place-items-center md:flex-row">
+                        <h2
+                          className="text-text text-wrap text-2xl font-extrabold"
+                          dangerouslySetInnerHTML={{ __html: post.title }}
+                        />
+                        {post.tag && (
+                          <h3 className="bg-dark text-light ml-3 rounded-full p-1 px-2 text-xs">
+                            {post.tag}
+                          </h3>
+                        )}
+                      </div>
                       <div className="flex flex-row items-center text-left md:flex-col md:items-end">
                         <Link to={`/users/${post.user_id}`} className="text-sm">
                           {post.username}
