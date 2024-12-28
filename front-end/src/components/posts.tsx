@@ -161,13 +161,13 @@ function Posts({
                       {/* <h2 className="text-text text-wrap text-2xl font-bold">
                         {post.title}
                       </h2> */}
-                      <div className="flex flex-col place-items-center md:flex-row">
+                      <div className="md: flex flex-col md:flex-row md:place-items-center">
                         <h2
                           className="text-text text-wrap text-2xl font-extrabold"
                           dangerouslySetInnerHTML={{ __html: post.title }}
                         />
                         {post.tag && (
-                          <h3 className="bg-dark text-light ml-3 rounded-full p-1 px-2 text-xs">
+                          <h3 className="bg-dark text-light w-fit rounded-full p-1 px-2 text-xs md:ml-3">
                             {post.tag}
                           </h3>
                         )}
@@ -238,7 +238,10 @@ function Posts({
                 <Votes post_id={Number(post.ID)} user={user.current} />
                 <Options
                   post_id={post.ID}
-                  enable={user.current?.userID === post.user_id || user.current?.admin === true}
+                  enable={
+                    user.current?.userID === post.user_id ||
+                    user.current?.admin === true
+                  }
                 />
               </div>
             </Link>
