@@ -26,7 +26,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), 14)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to hash password"})
 		return
@@ -102,7 +102,7 @@ func UpdateUserPassword(c *gin.Context) {
 		return
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.NewPassword), 14)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(body.NewPassword), 10)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to hash password"})
 		return
@@ -209,7 +209,7 @@ func Login(c *gin.Context) {
 	claims := jwt.MapClaims{
 		"userID":   user.ID,
 		"username": user.Username,
-		"admin": user.Admin,
+		"admin":    user.Admin,
 		"exp":      time.Now().Add(24 * time.Hour).Unix(),
 		"iat":      time.Now().Unix(),
 	}
