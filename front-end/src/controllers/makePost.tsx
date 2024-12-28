@@ -41,7 +41,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
     return (
       <div
         onClick={() => setOpen(!open)}
-        className="group relative m-2 flex flex-col"
+        className="group relative z-30 m-2 flex flex-col"
       >
         <div className="bg-dark text-light flex w-fit flex-row items-center rounded-full p-1 px-2 text-xs">
           <FaTags className="mr-1" />
