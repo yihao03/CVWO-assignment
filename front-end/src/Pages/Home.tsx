@@ -40,7 +40,7 @@ export default function Home() {
           <button
             onClick={() => setTagged(undefined)}
             className={
-              "text-text bg-primary m-0 h-full p-1 px-2 text-lg duration-300 hover:brightness-125" +
+              "text-text bg-primary m-0 h-full p-1 px-2 text-lg duration-300 hover:-translate-y-1 hover:brightness-125" +
               " " +
               (tagged === undefined ? "border-light border-b-2" : "")
             }
@@ -53,7 +53,7 @@ export default function Home() {
                 setTagged(tag.tag);
               }}
               className={
-                "text-text bg-primary m-0 h-full p-1 px-2 text-lg duration-300 hover:brightness-125" +
+                "text-text bg-primary m-0 h-full p-1 px-2 text-lg duration-300 hover:-translate-y-1 hover:brightness-125" +
                 " " +
                 (tagged === tag.tag ? "border-light border-b-2" : "")
               }
@@ -88,7 +88,7 @@ export default function Home() {
           </h1>
           <Link
             to="/post"
-            className="bg-light text-text mx-auto w-1/2 rounded-full p-2 px-4 shadow-md"
+            className="bg-light text-text mx-auto w-1/2 rounded-full p-2 px-4 text-opacity-50 shadow-md duration-200 hover:-translate-y-1 hover:text-opacity-95 hover:shadow-lg"
           >
             {info?.post_prompt ?? "What's on your mind?"}
           </Link>

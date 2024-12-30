@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { GetUserInfo } from "./auth";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import apiClient from "../api/axiosInstance";
 import UITemplate from "../components/sidebar";
 import { User } from "../Pages/users";
