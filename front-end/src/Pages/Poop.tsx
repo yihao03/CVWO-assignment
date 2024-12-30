@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "../App.css";
 import UITemplate from "../components/sidebar";
 
 function PoopCount() {
@@ -8,8 +7,20 @@ function PoopCount() {
 
   function handleClick(): void {
     setCount(count + 1);
-    if (count === 10) {
-      alert("You're a poophead!");
+    if (count === 5) {
+      alert("good shit");
+    } else if (count === 10) {
+      alert("solid!");
+    } else if (count === 15) {
+      alert("abit too much");
+    } else if (count === 20) {
+      alert("wait bro hold up");
+    } else if (count === 25) {
+      alert("stop stop STOP");
+    } else if (count === 30) {
+      alert("bro solving world hunger");
+    } else if (count === 50) {
+      alert("i have no words (just shits)");
     }
   }
 
@@ -21,7 +32,7 @@ function PoopCount() {
             <img
               src="https://www.svgrepo.com/show/402483/pile-of-poo.svg"
               alt="cute poop photo"
-              className="bg-primary mb-4 size-64 rounded-xl p-4 shadow-amber-950 duration-300 hover:size-96"
+              className="bg-bg mb-4 size-64 rounded-xl p-4 shadow-amber-950 duration-300 hover:size-96"
             />
             <h1 className="text-center text-5xl font-bold shadow-sm">
               Best Poop Counter

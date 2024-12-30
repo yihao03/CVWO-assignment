@@ -81,7 +81,7 @@ const UserCreationForm: React.FC = () => {
         <form onSubmit={handleSubmit} className="flex flex-col items-center">
           <div>
             <input
-              className="bg-light m-1 h-10 w-96 p-1 text-gray-700"
+              className="bg-primary m-1 h-10 w-96 p-1 text-gray-700"
               type={"text"}
               id="outlined-basic"
               name="username"
@@ -92,7 +92,7 @@ const UserCreationForm: React.FC = () => {
           </div>
           <div>
             <input
-              className="bg-light m-1 h-10 w-96 p-1 text-gray-700"
+              className="bg-primary m-1 h-10 w-96 p-1 text-gray-700"
               type={"text"}
               id="outlined-basic"
               name="email"
@@ -103,7 +103,7 @@ const UserCreationForm: React.FC = () => {
           </div>
           <div>
             <input
-              className="bg-light m-1 h-10 w-96 p-1 text-gray-700"
+              className="bg-primary m-1 h-10 w-96 p-1 text-gray-700"
               type={"password"}
               id="outlined-basic"
               name="password"
@@ -116,7 +116,7 @@ const UserCreationForm: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-secondary text-light w-fit place-self-center rounded-sm px-2 py-1 font-thin"
+            className="bg-secondary text-primary w-fit place-self-center rounded-sm px-2 py-1 font-thin"
           >
             {loading ? "Submitting..." : "Create User"}
           </button>

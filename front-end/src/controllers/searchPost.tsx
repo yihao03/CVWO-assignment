@@ -29,7 +29,7 @@ export default function SearchPost(): React.ReactElement {
         <input
           type="text"
           placeholder="What are you looking for?"
-          className="bg-light m-1 h-10 w-1/2 p-1 text-gray-700"
+          className="bg-primary m-1 h-10 w-1/2 p-1 text-gray-700"
           onChange={handleSearch}
         />
         <ul className="w-full">
@@ -38,7 +38,7 @@ export default function SearchPost(): React.ReactElement {
               <Link
                 to={`/posts/${post.ID}`}
                 key={post.ID}
-                className="bg-light m-1 flex h-fit w-full flex-col justify-between rounded p-6 shadow-md"
+                className="bg-primary m-1 flex h-fit w-full flex-col justify-between rounded p-6 shadow-md"
               >
                 <h1>
                   <span className="text-xl font-bold">{post.title}</span>

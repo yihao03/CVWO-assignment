@@ -73,12 +73,12 @@ function Login(): React.ReactElement {
           <h1 className="text-text mb-2 text-6xl font-bold">User Login</h1>
           <form onSubmit={handleSubmit} className="flex flex-col">
             <input
-              className="bg-light m-1 h-10 w-96 p-1 text-gray-700"
+              className="bg-primary m-1 h-10 w-96 p-1 text-gray-700"
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               placeholder="Username"
             />
             <input
-              className="bg-light m-1 h-10 w-96 p-1 text-gray-700"
+              className="bg-primary m-1 h-10 w-96 p-1 text-gray-700"
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               placeholder="Password"
               type="password"

@@ -67,7 +67,7 @@ function Options({
       }}
     >
       <CgOptions className="mx-auto my-2 size-4" />
-      <div className="bg-light absolute z-30 flex w-fit origin-top-right -translate-x-12 translate-y-5 scale-0 flex-col rounded-sm p-2 text-sm shadow-md duration-100 group-hover:scale-100 md:origin-top-left md:translate-x-5">
+      <div className="bg-primary absolute z-30 flex w-fit origin-top-right -translate-x-12 translate-y-5 scale-0 flex-col rounded-sm p-2 text-sm shadow-md duration-100 group-hover:scale-100 md:origin-top-left md:translate-x-5">
         <Link
           to={`/posts/${post_id}/edit`}
           className={enable ? "" : "pointer-events-none text-gray-500"}
@@ -149,7 +149,7 @@ function Posts({
           <Fragment key={post.ID}>
             {/* clickable post body */}
             <Link
-              className="bg-light relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow-md"
+              className="bg-primary relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow-md"
               to={`/posts/${post.ID}`}
               onClick={window.location.reload}
             >
@@ -167,7 +167,7 @@ function Posts({
                           dangerouslySetInnerHTML={{ __html: post.title }}
                         />
                         {post.tag && (
-                          <h3 className="bg-dark text-light w-fit rounded-full p-1 px-2 text-xs md:ml-3">
+                          <h3 className="bg-dark text-primary w-fit rounded-full p-1 px-2 text-xs md:ml-3">
                             {post.tag}
                           </h3>
                         )}
@@ -176,7 +176,7 @@ function Posts({
                         <Link to={`/users/${post.user_id}`} className="text-sm">
                           {post.username}
                         </Link>
-                        <p className="text-secondary ml-1 text-xs">
+                        <p className="text-text ml-1 text-xs">
                           {new Date(post.CreatedAt ?? "").toLocaleString(
                             "en-UK",
                             {
@@ -254,7 +254,7 @@ function Posts({
               fetchPost(false);
             }}
             disabled={status === "no more posts"}
-            className="bg-light text-secondary m-2 flex-1 rounded-md p-2 text-sm shadow-md"
+            className="bg-primary text-secondary m-2 flex-1 rounded-md p-2 text-sm shadow-md"
           >
             {status}
           </button>

@@ -65,7 +65,7 @@ function Users() {
             <input
               type="text"
               onChange={handleSearch}
-              className="bg-light placeholder:text-primary sticky top-0 m-3 w-11/12 rounded p-2"
+              className="bg-primary placeholder:text-bg sticky top-0 m-3 w-11/12 rounded p-2"
               placeholder="Search users"
             />
             <ul className="top-0 flex w-full flex-col items-center">
@@ -73,7 +73,7 @@ function Users() {
                 user.map((user) => (
                   <Fragment key={user.ID}>
                     <div
-                      className="bg-light m-2 flex h-fit w-5/6 flex-col text-nowrap rounded-xl p-8"
+                      className="bg-primary m-2 flex h-fit w-5/6 flex-col text-nowrap rounded-xl p-8"
                       onClick={() => {
                         navigate(`/users/${user.ID}`);
                       }}
@@ -96,7 +96,7 @@ function Users() {
       <>
         <UITemplate>
           <>
-            <div className="bg-secondary flex h-screen w-1/4 flex-col">
+            <div className="bg-dark flex h-screen w-1/4 flex-col">
               <input
                 type="text"
                 onChange={handleSearch}
@@ -108,7 +108,7 @@ function Users() {
                   user.map((user) => (
                     <Fragment key={user.ID}>
                       <div
-                        className="bg-primary m-2 flex h-fit w-11/12 flex-col text-nowrap rounded-xl p-8"
+                        className="bg-bg m-2 flex h-fit w-11/12 flex-col text-nowrap rounded-xl p-8"
                         onClick={() => {
                           navigate(`/users/${user.ID}`);
                         }}
@@ -119,12 +119,6 @@ function Users() {
                       </div>
                     </Fragment>
                   ))}
-                <Link
-                  to="/users/create"
-                  className="text-primary absolute bottom-1 text-lg italic"
-                >
-                  create user
-                </Link>
               </ul>
             </div>
             <div className="flex flex-1 overflow-auto">
@@ -194,12 +188,12 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
       return editor ? (
         <div className="m-4 flex grow flex-col items-center">
           <form
-            className="bg-light flex w-full flex-col rounded p-2"
+            className="bg-primary flex w-full flex-col rounded p-2"
             onSubmit={handleSubmit}
           >
-            <div className="outline-primary m-2 flex flex-col items-center space-y-4 rounded text-base outline">
+            <div className="outline-bg m-2 flex flex-col items-center space-y-4 rounded text-base outline">
               {/* Toolbar */}
-              <div className="bg-primary mb-0 flex w-full">
+              <div className="bg-bg mb-0 flex w-full">
                 <button
                   type="button"
                   className="toolbar-button"
@@ -263,7 +257,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
             </div>
             <button
               type="submit"
-              className="bg-primary w-fit place-self-center rounded px-2 py-1 text-sm text-gray-600 duration-100 hover:shadow-sm hover:brightness-75"
+              className="bg-bg w-fit place-self-center rounded px-2 py-1 text-sm text-gray-600 duration-100 hover:shadow-sm hover:brightness-75"
             >
               Submit
             </button>
@@ -328,7 +322,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
           </h3>
           {user?.bio ? (
             <p
-              className="bg-light rounded-md p-4"
+              className="bg-primary rounded-md p-4"
               dangerouslySetInnerHTML={{ __html: user?.bio }}
             />
           ) : (

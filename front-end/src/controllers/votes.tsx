@@ -115,23 +115,23 @@ export default function Votes({
 
   return (
     <>
-      <div className="bg-primary flex flex-col place-items-center rounded p-0">
+      <div className="bg-bg flex flex-col place-items-center rounded p-0">
         <button onClick={(e) => vote(e, true)}>
           <FaSquareCaretUp
             className={
               upvotes.userVoted === true
-                ? "fill-secondary hover:fill-dark size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
-                : "fill-light hover:fill-secondary size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
+                ? "fill-dark hover:fill-secondary size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
+                : "fill-primary hover:fill-dark size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
             }
           />
         </button>
-        <div className="p-1 text-sm font-light">{upvotes?.count}</div>
+        <div className="font-primary p-1 text-sm">{upvotes?.count}</div>
         <button onClick={(e) => vote(e, false)}>
           <FaSquareCaretDown
             className={
               upvotes.userVoted === false
-                ? "fill-secondary hover:fill-dark size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
-                : "fill-light hover:fill-secondary size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
+                ? "fill-dark hover:fill-secondary size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
+                : "fill-primary hover:fill-dark size-6 origin-center duration-100 hover:scale-125 hover:shadow-md"
             }
           />
         </button>

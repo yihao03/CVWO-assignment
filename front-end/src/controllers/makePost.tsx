@@ -43,14 +43,14 @@ function MakePost(props: MakePostDetails): React.ReactElement {
         onClick={() => setOpen(!open)}
         className="group relative z-30 m-2 flex flex-col"
       >
-        <div className="bg-dark text-light flex w-fit flex-row items-center rounded-full p-1 px-2 text-xs">
+        <div className="bg-dark text-primary flex w-fit flex-row items-center rounded-full p-1 px-2 text-xs">
           <FaTags className="mr-1" />
           {post.tag}
         </div>
         <div
           className={
             open
-              ? "bg-light absolute flex translate-y-6 flex-col shadow-md"
+              ? "bg-primary absolute flex translate-y-6 flex-col shadow-md"
               : "hidden"
           }
         >
@@ -160,7 +160,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
   return editor ? (
     <div className="m-4 flex grow flex-col items-center">
       <form
-        className="bg-light flex w-full flex-col rounded p-2"
+        className="bg-primary flex w-full flex-col rounded p-2"
         onSubmit={handleSubmit}
       >
         {props.type === "post" || props.type === "edit" ? (
@@ -169,16 +169,16 @@ function MakePost(props: MakePostDetails): React.ReactElement {
             placeholder="Title"
             value={props.type === "edit" ? post.title : post.title}
             onChange={(e) => setPost({ ...post, title: e.target.value })}
-            className="placeholder:text-primary m-1 w-full bg-inherit p-1"
+            className="placeholder:text-bg m-1 w-full bg-inherit p-1"
             disabled={props.type === "edit"}
           />
         ) : (
           <p>Reply to: {"Post " + props.parentID}</p>
         )}
         <Tags />
-        <div className="outline-primary m-2 flex flex-col items-center space-y-4 overflow-auto rounded outline">
+        <div className="outline-bg m-2 flex flex-col items-center space-y-4 overflow-auto rounded outline">
           {/* Toolbar */}
-          <div className="bg-primary mb-0 flex w-full">
+          <div className="bg-bg mb-0 flex w-full">
             <button
               type="button"
               className="toolbar-button"
@@ -240,7 +240,7 @@ function MakePost(props: MakePostDetails): React.ReactElement {
         </div>
         <button
           type="submit"
-          className="bg-primary text-light w-fit place-self-center rounded px-2 py-1 text-sm duration-100 hover:shadow-sm hover:brightness-75"
+          className="bg-bg text-primary w-fit place-self-center rounded px-2 py-1 text-sm duration-100 hover:shadow-sm hover:brightness-75"
         >
           Submit
         </button>
