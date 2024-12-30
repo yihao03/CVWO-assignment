@@ -184,6 +184,7 @@ func DeleteUser(c *gin.Context) {
 var jwtKey = []byte("SECRET_KEY")
 
 func Login(c *gin.Context) {
+	//get username and password from frontend
 	var body struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -195,12 +196,14 @@ func Login(c *gin.Context) {
 	}
 
 	var user model.User
+	//find user by username
 	if err := initializers.Database.Where("username = ?", body.Username).First(&user).Error; err != nil {
 		fmt.Println("user not found")
 		c.JSON(404, gin.H{"error": "User not found"})
 		return
 	}
 
+	//compare the password from the request body with the hashed password in the database
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err != nil {
 		c.JSON(401, gin.H{"error": "Invalid password"})
 		return
@@ -222,7 +225,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"token": tokenString, "user_id": user.ID, "username": user.Username})
+	c.JSON(200, gin.H{"token": tokenString})
 }
 
 func Authenticate() gin.HandlerFunc {
