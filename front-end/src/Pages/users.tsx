@@ -22,6 +22,7 @@ function Users() {
   const [user, setUser] = useState<User[]>([]);
   const mobile = window.innerWidth < 768;
   const params = useParams();
+  const navigate = useNavigate();
 
   function handleSearch(event: React.ChangeEvent<HTMLInputElement>) {
     const search = event.target.value;
@@ -33,8 +34,6 @@ function Users() {
       })
       .catch((err) => console.error("Error fetching users:", err));
   }
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     apiClient
@@ -142,6 +141,7 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<User>();
   const [editing, setEditing] = useState(false);
+  const navigate = useNavigate();
 
   const loggedInUser = useRef(GetUserInfo());
 
@@ -297,12 +297,20 @@ function UserProfile({ edit = false }: { edit?: boolean }) {
           <h2 className="text-text text-xl underline">
             {user?.email}{" "}
             {edit && (
-              <button
-                className="ml-2 cursor-pointer text-sm font-thin text-blue-700"
-                onClick={handleChangeEmail}
-              >
-                change email
-              </button>
+              <>
+                <button
+                  className="ml-2 cursor-pointer text-sm font-thin text-blue-700"
+                  onClick={handleChangeEmail}
+                >
+                  change email
+                </button>
+                <button
+                  className="ml-2 cursor-pointer text-sm font-thin text-blue-700"
+                  onClick={() => navigate("/users/reset_password")}
+                >
+                  reset password
+                </button>
+              </>
             )}
           </h2>
           <p className="text-text text-sm font-thin italic">

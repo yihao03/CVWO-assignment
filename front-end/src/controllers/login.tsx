@@ -44,25 +44,15 @@ function Login(): React.ReactElement {
     password: "",
   });
 
-  useEffect(() => {
-    const status = GetUserInfo();
-    if (status !== null) {
-      setForm({
-        ...form,
-        ID: Number(status.userID),
-        username: String(status.username),
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     apiClient
       .post("/login", form)
       .then((res) => {
+        localStorage.removeItem("token");
         localStorage.setItem("token", res.data.token);
         navigate("/");
+        window.location.reload();
       })
       .catch((err) => {
         console.error(err);
@@ -71,7 +61,11 @@ function Login(): React.ReactElement {
   };
 
   if (localStorage.getItem("token")) {
-    return <div className="text-2xl">Welcome {form.username}!</div>;
+    return (
+      <UITemplate>
+        <div className="text-2xl">Welcome {form.username}!</div>
+      </UITemplate>
+    );
   } else {
     return (
       <UITemplate>
