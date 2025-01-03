@@ -76,6 +76,7 @@ The app started with features outlined in the assignment requirements and has si
 7. **Poop Count**: A fun feature I implemented while learning React and Tailwind CSS.
 8. **Search**: Search for posts, replies, and users.
 9. **Tagging**: Add tags to posts and users.
+10. **Admin roles**: Allow admins (role assigned from the database) to edit and delete all posts.
 
 ### Upcoming Features
 
