@@ -75,14 +75,14 @@ The app started with features outlined in the assignment requirements and has si
 6. **User Authentication**: JWT-based authentication with bcrypt password hashing.
 7. **Poop Count**: A fun feature I implemented while learning React and Tailwind CSS.
 8. **Search**: Search for posts, replies, and users.
+9. **Tagging**: Add tags to posts and users.
 
 ### Upcoming Features
 
-1. **Tagging**: Add tags to posts and users.
-2. **Filtering & Sorting**: Ability to filter and sort posts.
-3. **Swipe to Vote**: Similar to Tinder swipe for voting.
-4. **Embed Code Editor**: Implement a code editor that can execute simple code snippets.
-5. **More Features**: Additional features will be added over time.
+1. **Filtering & Sorting**: Ability to filter and sort posts. (partially implemented)
+2. **Swipe to Vote**: Similar to Tinder swipe for voting.
+3. **Embed Code Editor**: Implement a code editor that can execute simple code snippets.
+4. **More Features**: Additional features will be added over time.
 
 ---
 
