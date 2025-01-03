@@ -57,7 +57,7 @@ I chose PostgreSQL for its popularity, comprehensive documentation, and generous
 
 ### Performance Considerations
 
-Even though operations like user login and password creation (using **bcrypt** for password hashing) may take some time, they are still optimized for efficiency.
+Considering this project will be hosted on free services with limited compute power, it is designed to be as lightweight as possible
 
 ---
 
