@@ -93,7 +93,11 @@ function Posts({
   parent_id,
   tag,
 }: PostParams) {
-  const [posts, setPosts] = useState<Post[]>([]);
+  interface PostWithVote extends Post {
+    count: number;
+    userVoted: boolean;
+  }
+  const [posts, setPosts] = useState<PostWithVote[]>([]);
   const [status, setStatus] = useState<PostStatus>("load more");
   const cursor = useRef<string>("");
   const user = useRef(GetUserInfo());
@@ -109,6 +113,9 @@ function Posts({
     if (replace) {
       cursor.current = "";
     }
+    if (user.current?.userID) {
+      params.curr_user = user.current?.userID.toString();
+    }
 
     console.log("fetching post with params:", params);
 
@@ -120,9 +127,9 @@ function Posts({
         console.log("fetched posts:", response.data);
 
         if (replace) {
-          setPosts(response.data.post);
+          setPosts(response.data.posts);
         } else {
-          setPosts((prevPosts) => prevPosts.concat(response.data.post));
+          setPosts((prevPosts) => prevPosts.concat(response.data.posts));
         }
 
         if (response.data.nextCursor) {
@@ -139,8 +146,8 @@ function Posts({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => fetchPost(true), [user_id, post_id, tag]);
 
-  if (posts.length === 0) {
-    return;
+  if (!posts || posts.length === 0) {
+    return null;
   } else {
     return (
       <ul className="flex w-full flex-col">
@@ -235,7 +242,7 @@ function Posts({
               </div>
 
               <div className="absolute right-2 justify-between">
-                <Votes post_id={Number(post.ID)} user={user.current} />
+                <Votes post_id={Number(post.ID)} user={user.current} count={post.count} voted={post.userVoted}/>
                 <Options
                   post_id={post.ID}
                   enable={

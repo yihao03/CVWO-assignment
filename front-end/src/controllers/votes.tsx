@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useRef, useState } from "react";
 import { ExtendedJwtPayload } from "./auth";
 import apiClient from "../api/axiosInstance";
 import { FaSquareCaretUp, FaSquareCaretDown } from "react-icons/fa6";
@@ -13,50 +13,28 @@ interface UpvoteStatus {
 export default function Votes({
   post_id,
   user,
+  count,
+  voted
 }: {
   post_id: number;
   user: ExtendedJwtPayload | null;
+  count: number;
+  voted: boolean;
 }): ReactElement {
   const [upvotes, setUpvotes] = useState<UpvoteStatus>({
-    count: 0,
-    userVoted: undefined,
+    count: count,
+    userVoted: voted,
   });
-  const [params, setParams] =
-    useState<Record<string, string | undefined | number>>();
+  const params =
+    useRef<Record<string, string | undefined | number>>({
+      user_id: user?.userID,
+      post_id: post_id,
+    });
 
-  //Initialise and fetch upvote count
-  function getInitial() {
-    const currentParams: Record<string, number | undefined> = {
-      post_id: Number(post_id),
-    };
-    if (user) {
-      currentParams.user_id = user.userID;
-    }
-
-    setParams(currentParams);
-    console.log(currentParams);
-
-    apiClient
-      .get(`/votes`, { params: currentParams })
-      .then((res) => {
-        console.log(post_id, res);
-        setUpvotes({
-          count: res.data.count,
-          userVoted: res.data.userVoted,
-        });
-      })
-      .catch((err) => {
-        setUpvotes({
-          count: -1,
-          userVoted: undefined,
-        });
-        console.log("unable to get votes", err);
-      });
-  }
 
   function vote(event: React.MouseEvent<HTMLButtonElement>, vote: VoteStatus) {
     event.preventDefault();
-    console.log("params as of voting", params, upvotes);
+    console.log("params as of voting", params.current, upvotes);
     if (!user) {
       alert("please log in first");
       return;
@@ -64,9 +42,9 @@ export default function Votes({
     const currVote = upvotes.userVoted;
     //remove existing vote
     if (currVote !== undefined) {
-      console.log("current status:", params, upvotes);
+      console.log("current status:", params.current, upvotes);
       apiClient
-        .delete("/votes", { params: params })
+        .delete("/votes", { params: params.current })
         .then((res) => {
           console.log(
             `vote by ${user?.username} for post ${post_id} has been removed`,
@@ -88,7 +66,7 @@ export default function Votes({
     if (vote !== upvotes.userVoted) {
       apiClient
         .post("/votes", {
-          ...params,
+          ...params.current,
           vote: vote,
         })
         .then((res) => {
@@ -109,9 +87,6 @@ export default function Votes({
       }));
     }
   }
-
-  //eslint-disable-next-line
-  useEffect(getInitial, []);
 
   return (
     <>
