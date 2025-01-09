@@ -45,23 +45,28 @@ func Post(c *gin.Context) {
 	}
 }
 
-func GetPost(c *gin.Context) {
-	id := c.Param("id")
-	var post model.Post
-	initializers.Database.First(&post, id)
-
-	c.JSON(200, gin.H{"post": post})
-}
-
 func GetAllPost(c *gin.Context) {
 	limit := 10
 	cursor := c.Query("cursor")
 	postID := c.Query("post_id")
 	userID := c.Query("user_id")
 	parent := c.Query("parent_id")
+	currUser := c.Query("curr_user")
 	tag := c.Query("tag")
 
-	var post []model.Post
+	type PostWithVote struct {
+		model.Post
+		Count     int   `json:"count"`
+		UserVoted *bool `json:"userVoted,omitempty"`
+	}
+
+	type Vote struct {
+		PostID    uint `json:"postID"`
+		Count     int  `json:"count"`
+		UserVoted bool `json:"userVoted"`
+	}
+
+	var posts []model.Post
 	query := initializers.Database
 
 	//check cursor
@@ -99,26 +104,81 @@ func GetAllPost(c *gin.Context) {
 	}
 
 	//check query, bind and check for error
-	if err := query.Order("created_at DESC").Limit(limit).Find(&post).Error; err != nil {
+	if err := query.Order("created_at DESC").Limit(limit).Find(&posts).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch posts"})
 		return
 	}
 
-	// Generate the next cursor and return if cursor is present
-	var nextCursor string
-	if len(post) > 0 {
-		nextCursor = post[len(post)-1].CreatedAt.Format(time.RFC3339)
+	//return early if no posts are present
+	if len(posts) == 0 {
 		c.JSON(http.StatusOK, gin.H{
-			"post":       post,
-			"nextCursor": nextCursor,
+			"post": posts,
 		})
 		return
 	}
 
-	//return without cursor
+	//manage votes
+	//collect post IDs
+	postIDs := make([]uint, len(posts))
+	for i, post := range posts {
+		postIDs[i] = post.ID
+	}
+
+	var voteCounts []Vote
+
+	//calculate votes
+	voteQuery := `
+		SELECT 
+			post_id,
+			SUM(CASE WHEN vote = true THEN 1 WHEN vote = false THEN -1 ELSE 0 END) as count
+		FROM votes 
+		WHERE post_id IN (?) AND deleted_at IS NULL
+		GROUP BY post_id`
+
+	if err := initializers.Database.Raw(voteQuery, postIDs).Scan(&voteCounts).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch votes"})
+		return
+	}
+
+	voteCountsMap := make(map[uint]int)
+	for _, vc := range voteCounts {
+		voteCountsMap[vc.PostID] = vc.Count
+	}
+
+	// Get user votes in a single query if currUser is provided
+	userVoteMap := make(map[uint]bool)
+	if currUser != "" {
+		var userVotes []model.Vote
+		if err := initializers.Database.Where("user_id = ? AND post_id IN (?)", currUser, postIDs).Find(&userVotes).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user votes"})
+			return
+		}
+		for _, vote := range userVotes {
+			userVoteMap[vote.PostID] = vote.Vote
+		}
+	}
+
+	// Combine all data
+	postsWithVotes := make([]PostWithVote, len(posts))
+	for i, post := range posts {
+		postsWithVotes[i] = PostWithVote{
+			Post:  post,
+			Count: voteCountsMap[post.ID],
+		}
+		if currUser != "" {
+			if vote, exists := userVoteMap[post.ID]; exists {
+				postsWithVotes[i].UserVoted = &vote
+			}
+		}
+	}
+
+	// Return response with next cursor
+	nextCursor := posts[len(posts)-1].CreatedAt.Format(time.RFC3339)
 	c.JSON(http.StatusOK, gin.H{
-		"post": post,
+		"posts":      postsWithVotes,
+		"nextCursor": nextCursor,
 	})
+
 }
 
 func SearchPost(c *gin.Context) {
