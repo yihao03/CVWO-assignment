@@ -25,11 +25,11 @@ export default function SearchPost(): React.ReactElement {
   return (
     <UITemplate>
       <div className="mx-auto flex w-5/6 flex-col items-center">
-        <h1 className="m-4 ml-0 place-self-start text-4xl font-bold">Search</h1>
+        <h1 className="m-4 ml-0 text-4xl font-bold">Search</h1>
         <input
           type="text"
           placeholder="What are you looking for?"
-          className="bg-primary m-1 h-10 w-1/2 p-1 text-gray-700"
+          className="bg-primary m-1 h-10 w-1/2 p-1 text-gray-700 rounded  shadow hover:-translate-y-1 duration-150 hover:shadow-lg"
           onChange={handleSearch}
         />
         <ul className="w-full">
@@ -40,12 +40,12 @@ export default function SearchPost(): React.ReactElement {
                 key={post.ID}
                 className="bg-primary m-1 flex h-fit w-full flex-col justify-between rounded p-6 shadow-md"
               >
-                <h1>
-                  <span className="text-xl font-bold">{post.title}</span>
-                  <span className="ml-2 text-sm font-thin">
+                <div className={"flex flex-row justify-between align-text-top"}>
+                  <h1 className="text-xl font-bold" dangerouslySetInnerHTML={{ __html: post.title }} />
+                  <a className="ml-2 text-sm font-thin">
                     {post.username}
-                  </span>
-                </h1>
+                  </a>
+                </div>
                 <div>
                   <p
                     dangerouslySetInnerHTML={{
