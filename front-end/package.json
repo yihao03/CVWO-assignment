@@ -11,6 +11,7 @@
     "stop": "killall node"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "@tiptap/extension-code-block-lowlight": "^2.10.4",
     "@tiptap/extension-link": "^2.10.4",
     "@tiptap/extension-placeholder": "^2.10.4",
@@ -23,12 +24,14 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
+    "react-markdown": "^9.0.3",
     "react-pro-sidebar": "^1.1.0",
     "react-router": "^7.0.2",
     "react-router-dom": "^7.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",

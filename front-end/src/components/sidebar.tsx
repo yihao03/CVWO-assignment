@@ -1,4 +1,4 @@
-import { FaPoop } from "react-icons/fa";
+import { FaBrain, FaPoop } from "react-icons/fa";
 import { MdHome, MdOutlineManageSearch, MdPerson } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { LogInOut } from "../controllers/login";
@@ -43,6 +43,11 @@ export default function UITemplate(props: { children: React.ReactNode }) {
             icon={<MdOutlineManageSearch className="sidebar-button" />}
             link="/search"
             text="Search Posts"
+          />
+          <SidebarIcon
+            icon={<FaBrain className="sidebar-button" />}
+            link="/gemini"
+            text="Talk to AI"
           />
           <LogInOut />
         </nav>
