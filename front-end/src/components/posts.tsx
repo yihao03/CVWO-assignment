@@ -156,7 +156,7 @@ function Posts({
           <Fragment key={post.ID}>
             {/* clickable post body */}
             <Link
-              className="bg-primary relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow-md"
+              className="bg-primary relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow transition delay-100 duration-300 ease-in-out hover:scale-[1.01] hover:shadow-md"
               to={`/posts/${post.ID}`}
               onClick={window.location.reload}
             >
@@ -242,7 +242,12 @@ function Posts({
               </div>
 
               <div className="absolute right-2 justify-between">
-                <Votes post_id={Number(post.ID)} user={user.current} count={post.count} voted={post.userVoted}/>
+                <Votes
+                  post_id={Number(post.ID)}
+                  user={user.current}
+                  count={post.count}
+                  voted={post.userVoted}
+                />
                 <Options
                   post_id={post.ID}
                   enable={
