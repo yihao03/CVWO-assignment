@@ -2,11 +2,14 @@ import { useState } from "react";
 import UITemplate from "../components/sidebar";
 
 function PoopCount() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(
+    Number(localStorage.getItem("poopCount")) || 0,
+  );
   const user = localStorage.getItem("username");
 
   function handleClick(): void {
     setCount(count + 1);
+    localStorage.setItem("poopCount", (count + 1).toString());
     if (count === 5) {
       alert("good shit");
     } else if (count === 10) {
