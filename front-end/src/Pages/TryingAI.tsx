@@ -4,8 +4,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import ReactMarkdown from "react-markdown";
 
 export default function GeminiChat() {
-  const ai = new GoogleGenerativeAI("AIzaSyCOI_vQHFe-LaTmda6n_q-UQ4KiGsVuk9M");
-  const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const ai = new GoogleGenerativeAI(import.meta.env.VITE_AI_API_KEY);
+  const model = ai.getGenerativeModel({ model: import.meta.env.VITE_AI_MODEL });
 
   const [prompt, setPrompt] = useState<string>("");
   const [response, setResponse] = useState<string>("");
@@ -43,8 +43,8 @@ export default function GeminiChat() {
               Submit
             </button>
           </form>
-          <div className="prose max-w-none p-4 shadow bg-primary rounded min-h-36">
-            <ReactMarkdown >{response || "## Ask Gemini"}</ReactMarkdown>
+          <div className="prose bg-primary min-h-36 max-w-none rounded p-4 shadow">
+            <ReactMarkdown>{response || "## Ask Gemini"}</ReactMarkdown>
           </div>
         </div>
       </UITemplate>
