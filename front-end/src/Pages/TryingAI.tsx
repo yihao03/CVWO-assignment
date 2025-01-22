@@ -43,7 +43,7 @@ export default function GeminiChat() {
               Submit
             </button>
           </form>
-          <div className="prose bg-primary min-h-36 max-w-none rounded p-4 shadow">
+          <div className="prose bg-primary min-h-36 max-w-none overflow-auto rounded p-4 shadow">
             <ReactMarkdown>{response || "## Ask Gemini"}</ReactMarkdown>
           </div>
         </div>
