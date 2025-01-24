@@ -125,13 +125,18 @@ function Posts({
       .get("/posts", { params: params })
       .then((response) => {
         console.log("fetched posts:", response.data);
+        const newPosts = response.data.posts || [];
 
-        if (replace) {
-          setPosts(response.data.posts);
-        } else {
-          setPosts((prevPosts) => prevPosts.concat(response.data.posts));
+        if (newPosts.length === 0) {
+          // no posts returned
+          setStatus("no more posts");
+          return;
         }
-
+        if (replace) {
+          setPosts(newPosts);
+        } else {
+          setPosts((prevPosts) => prevPosts.concat(newPosts));
+        }
         if (response.data.nextCursor) {
           cursor.current = response.data.nextCursor;
         } else {
@@ -146,7 +151,7 @@ function Posts({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => fetchPost(true), [user_id, post_id, tag]);
 
-  if (!posts || posts.length === 0) {
+  if (posts.length === 0) {
     return null;
   } else {
     return (
@@ -156,7 +161,7 @@ function Posts({
           <Fragment key={post.ID}>
             {/* clickable post body */}
             <Link
-              className="bg-primary relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow transition delay-100 duration-300 ease-in-out hover:scale-[1.01] hover:shadow-md"
+              className="bg-primary relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow-md"
               to={`/posts/${post.ID}`}
               onClick={window.location.reload}
             >

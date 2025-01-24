@@ -14,7 +14,6 @@ import UserEdit from "./Pages/userEdit.tsx";
 import SearchPost from "./controllers/searchPost.tsx";
 import EditPost from "./Pages/editPost.tsx";
 import CreatePost from "./Pages/CreatePost.tsx";
-import GeminiChat from "./Pages/TryingAI.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -67,10 +66,6 @@ const router = createBrowserRouter([
     path: "/search",
     element: <SearchPost />,
   },
-  {
-    path: "/gemini",
-    element: <GeminiChat />
-  }
 ]);
 
 createRoot(document.getElementById("root")!).render(
