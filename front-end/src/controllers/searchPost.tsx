@@ -10,8 +10,8 @@ export default function SearchPost(): React.ReactElement {
   const [posts, setPosts] = useState<Post[]>([]);
   const [search, setSearch] = useState("");
 
-  const ai = new GoogleGenerativeAI("AIzaSyCOI_vQHFe-LaTmda6n_q-UQ4KiGsVuk9M");
-  const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const ai = new GoogleGenerativeAI(import.meta.env.VITE_AI_API_KEY);
+  const model = ai.getGenerativeModel({ model: import.meta.env.VITE_AI_MODEL });
 
   const [response, setResponse] = useState<string>("Gemini says...");
 
