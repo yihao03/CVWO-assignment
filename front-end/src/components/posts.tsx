@@ -161,7 +161,7 @@ function Posts({
           <Fragment key={post.ID}>
             {/* clickable post body */}
             <Link
-              className="bg-primary relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow-md"
+              className="bg-primary relative m-1 flex h-fit min-h-32 w-full flex-row justify-between rounded p-3 shadow-md transition delay-75 duration-150 hover:scale-[1.01]"
               to={`/posts/${post.ID}`}
               onClick={window.location.reload}
             >
