@@ -31,7 +31,7 @@ The frontend of the website is built using:
 - **TypeScript**
 - **Tailwind CSS**
 
-I opted for Tailwind CSS instead of component libraries like Material UI to ensure the app remains lightweight, customizable, and consistent, while speeding up the development cycle.
+I opted for TailwindCSS instead of component libraries like Material UI to ensure the app remains lightweight, customizable, and consistent, while speeding up the development cycle.
 
 ### Backend
 
@@ -74,8 +74,8 @@ The app started with features outlined in the assignment requirements and has si
 5. **User Profile**: Update user profile, including password and biography (with rich text support).
 6. **User Authentication**: JWT-based authentication with bcrypt password hashing.
 7. **Poop Count**: A fun feature I implemented while learning React and Tailwind CSS.
-8. **Search**: Search for posts, replies, and users.
-9. **Tagging**: Add tags to posts and users.
+8. **Search**: Search for posts, replies, and users. Searching for posts will also query an AI Model, making the responses more useful.
+9. **Tagging**: Add tags to posts.
 10. **Admin roles**: Allow admins (role assigned from the database) to edit and delete all posts.
 
 ### Upcoming Features
@@ -109,7 +109,7 @@ Both the frontend and backend are included in the same repository for simplicity
 
 - `./front-end`: Contains the frontend code.
 - `./back-end`: Contains the backend code.
-  
+
 The bulk of the code can be found within the `src` folder in both sections.
 
 ---
@@ -119,14 +119,29 @@ The bulk of the code can be found within the `src` folder in both sections.
 ### Frontend Deployment
 
 1. **Set the root directory** to `./front-end`.
-2. **Set relevant environment variables**: Refer to the existing `.env` file for necessary variables.
+2. **Set environment variables with the following names**
+   - VITE_AI_API_KEY (Your api key for Gemini)
+   - VITE_AI_MODEL (The name of AI model to be used, e.g. gemini-1.5-flash)
+   - VITE_API_TIMEOUT (Set timeout for backend repsonse before throwing an error)
+   - VITE_BACKEND_URL (URL of the backend server)
+   - VITE_BASE_URL (URL of the frontend website)
 3. **Build the app**: Run `npm run build`.
 4. **Start the app**: Run `./app`.
 
 ### Backend Deployment
 
 1. **Set the root directory** to `./back-end`.
-2. **Set relevant environment variables**: Refer to the existing `.env` file for necessary variables.
+2. **Set Environment variables with the following names**
+
+   - Database informations
+     - DB_NAME
+     - DB_PORT
+     - HOST
+     - PORT
+     - PASSWORD
+     - USER
+   - FRONTEND_URL
+
 3. **Build the app**: Run `go build`.
 4. **Start the app**: Run `main.go`.
 
