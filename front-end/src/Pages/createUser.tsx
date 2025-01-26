@@ -116,7 +116,7 @@ const UserCreationForm: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-secondary text-primary w-fit place-self-center rounded-sm px-2 py-1 font-thin"
+            className="bg-dark text-primary w-fit place-self-center rounded-sm px-2 py-1 font-thin"
           >
             {loading ? "Submitting..." : "Create User"}
           </button>

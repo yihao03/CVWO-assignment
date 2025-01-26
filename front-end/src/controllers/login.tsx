@@ -84,7 +84,7 @@ function Login(): React.ReactElement {
               type="password"
             />
             <button
-              className="bg-secondary w-fit place-self-center rounded-sm px-2 py-1"
+              className="bg-dark text-primary m-2 w-fit place-self-center rounded-sm px-2 py-1"
               type="submit"
             >
               Login
@@ -92,7 +92,7 @@ function Login(): React.ReactElement {
           </form>
           <Link
             to="/users/create"
-            className="m-2 cursor-pointer italic text-blue-500 hover:text-blue-700 hover:underline"
+            className="cursor-pointer italic text-blue-500 hover:text-blue-700 hover:underline"
           >
             Create User
           </Link>
